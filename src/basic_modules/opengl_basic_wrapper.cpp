@@ -12,6 +12,13 @@ void opengl_glad_load() {
     }
 }
 
+void window_validate(GLFWwindow *window) {
+    if (window == NULL) {
+         printf("Failed to create GLFW window.\n"); 
+         glfwTerminate();
+    }
+}
+
 void opengl_print_error() {
     GLenum error = glGetError();
     switch (error) {

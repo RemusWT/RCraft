@@ -13,9 +13,10 @@
 
 
 // Initialization
-void opengl_hints_basic();
+void opengl_context_init();
 void opengl_glad_load();
 void opengl_print_error();
+void window_validate(GLFWwindow *window);
 
 // BUFFERS
 typedef struct VBO {
