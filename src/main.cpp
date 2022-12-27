@@ -1,9 +1,7 @@
-#include "stuff.h"
-#include "../includes/glfw/glfw3.h"
+#include "basic_modules/opengl_basic_wrapper.h"
 
 int main() {
     printf("Hello, Sailor!\n");
-    print_stuff();
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
