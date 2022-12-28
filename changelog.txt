@@ -1,2 +1,3 @@
 Version: 0.0.1, 23/12/22
 ----------------------------
+Added settings/config loading.
