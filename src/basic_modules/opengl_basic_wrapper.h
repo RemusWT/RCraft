@@ -52,7 +52,7 @@ typedef u32 ProgramShaderID;
 
 typedef struct Shader{ // @TODO Add uniform functions.
     u32 ID;
-    Shader(const char* vertexPath, const char* fragmentPath);
+    Shader(const char* vertexSource, const char* fragmentSource);
     void use();
     void set1Float(const char* name, float value);
     void set3Float(const char* name, Floats3 vector);

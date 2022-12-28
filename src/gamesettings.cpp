@@ -1,5 +1,15 @@
 #include "gamesettings.h"
 
+void GameSettings_::set_vsync(bool state) {
+    if (state) {
+        vsync = true;
+        glfwSwapInterval(1);
+        return;}
+    vsync = false;
+    glfwSwapInterval(0);
+    
+}
+
 std::string gamesettings_get_fileconfig() {
     std::ifstream gamesettings_file("gamesettings.rcf", std::ios::binary);
     if (gamesettings_file.fail()) {
@@ -22,3 +32,4 @@ void gamesettings_load_config(GameSettings_ *GameSettings) {
     GameSettings->resolution_x = rcf_fetch_ivalue(gamesettings_string, "resolution_x");
     GameSettings->resolution_y = rcf_fetch_ivalue(gamesettings_string, "resolution_y");
 }
+

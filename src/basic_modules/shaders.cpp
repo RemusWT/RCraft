@@ -3,23 +3,19 @@
 #include "opengl_basic_wrapper.h"
 
 
-Shader::Shader(const char* vertexFilePath, const char* fragmentFilePath) {
+Shader::Shader(const char* vertexSource, const char* fragmentSource) {
     ID = glCreateProgram();
-    printf("Preparing shader %u for compiling...\n", ID);
-    std::string vertexSource   = file_get_contents(vertexFilePath);
-    std::string fragmentSource = file_get_contents(fragmentFilePath);
     
     u32 vertexShader, fragmentShader;
     vertexShader   = glCreateShader(GL_VERTEX_SHADER);
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    shaders_vertex_compile(vertexShader, vertexSource.c_str());
-    shaders_fragment_compile(fragmentShader, fragmentSource.c_str());
+    shaders_vertex_compile(vertexShader, vertexSource);
+    shaders_fragment_compile(fragmentShader, fragmentSource);
     shaders_program_link(ID, vertexShader, fragmentShader);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-    printf("Shader constructor finished.\n\n");
 }
 void Shader::use() {
     glUseProgram(ID);

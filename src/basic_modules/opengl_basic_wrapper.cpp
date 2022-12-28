@@ -54,10 +54,10 @@ VBO::VBO() {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
 }
-VBO::VBO(const void *data, GLsizeiptr size) { // @TODO specify the GL Draw method.
+VBO::VBO(const void *data, GLsizeiptr size_of_data) {
     glGenBuffers(1, &ID);
     glBindBuffer(GL_ARRAY_BUFFER, ID);
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, size_of_data, data, GL_STATIC_DRAW);
 }
 void VBO::update_vertex_buffer(const void *data, GLsizeiptr size) {
     glBindBuffer(GL_ARRAY_BUFFER, ID);
@@ -68,9 +68,9 @@ VAO::VAO() {
     glGenVertexArrays(1, &ID);
     glBindVertexArray(ID);
 }
-void VAO::attribute(u32 index, s32 size, GLenum type, u32 stride, u32 offset) {
+void VAO::attribute(u32 index, s32 elements_count, GLenum type, u32 stride, u32 offset) {
     glBindVertexArray(ID);
-    glVertexAttribPointer(index, size, type, GL_FALSE, stride * sizeof(type), (void*)(offset * sizeof(type)));
+    glVertexAttribPointer(index, elements_count, type, GL_FALSE, stride * sizeof(type), (void*)(offset * sizeof(type)));
     glEnableVertexAttribArray(index);
     
 }
