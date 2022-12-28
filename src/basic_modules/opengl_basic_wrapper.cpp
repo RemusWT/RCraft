@@ -68,9 +68,9 @@ VAO::VAO() {
     glGenVertexArrays(1, &ID);
     glBindVertexArray(ID);
 }
-void VAO::attribute(u32 index, s32 elements_count, GLenum type, u32 stride, u32 offset) {
+void VAO::attribute(u32 index, s32 data_size_in_bytes, GLenum type, u32 stride, u32 offset) {
     glBindVertexArray(ID);
-    glVertexAttribPointer(index, elements_count, type, GL_FALSE, stride * sizeof(type), (void*)(offset * sizeof(type)));
+    glVertexAttribPointer(index, data_size_in_bytes, type, GL_FALSE, stride * sizeof(type), (void*)(offset * sizeof(type)));
     glEnableVertexAttribArray(index);
     
 }
