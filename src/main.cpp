@@ -14,10 +14,7 @@ int main() {
 
     
     GameSettings_ GameSettings;
-    std::string gamesettings_string = gamesettings_get_fileconfig();
-    GameSettings.resolution_x = rcf_fetch_ivalue(gamesettings_string, "resolution_x");
-    GameSettings.resolution_y = rcf_fetch_ivalue(gamesettings_string, "resolution_y");
-    
+    gamesettings_load_config(&GameSettings);
     glfwInit();
     opengl_context_init();
 

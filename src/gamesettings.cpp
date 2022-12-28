@@ -16,3 +16,9 @@ std::string gamesettings_get_fileconfig() {
     gamesettings_file.close();
     return contents;
 }
+
+void gamesettings_load_config(GameSettings_ *GameSettings) {
+    std::string gamesettings_string = gamesettings_get_fileconfig();
+    GameSettings->resolution_x = rcf_fetch_ivalue(gamesettings_string, "resolution_x");
+    GameSettings->resolution_y = rcf_fetch_ivalue(gamesettings_string, "resolution_y");
+}

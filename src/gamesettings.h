@@ -9,4 +9,6 @@ typedef struct GameSettings_ {
 } GameSettings_;
 std::string gamesettings_get_fileconfig();
 
+void gamesettings_load_config(GameSettings_ *GameSettings);
+
 #endif
