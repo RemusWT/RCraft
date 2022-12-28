@@ -31,7 +31,7 @@ typedef struct VBO {
 typedef struct VAO {
     u32 ID;
     VAO();
-    void attribute(u32 index, s32 size, GLenum type, u32 stride, u32 offset);
+    void attribute(u32 index, s32 elements_count, GLenum type, u32 stride, u32 offset);
     void bind();
     void unbind();
 } VAO;
