@@ -5,18 +5,20 @@
 #include "basic_modules/rcf_basic.h"
 
 
+
+// TODO: GInfo global singleton. Useful so we can access the game's info from anywhere. Think more about it.
 typedef struct GameInfo {
     int resolution_x, resolution_y;
-    int viewport_x, viewport_y;
     GLFWwindow* window;
+    GameInfo();
+    
     bool vsync = false;
     void set_vsync(bool state);
-    void window_init();
     void set_viewport(int res_x, int res_y);
+    void load_config();
 } GameInfo;
 
 std::string gameinfo_get_fileconfig(); // Should change it to gameinfo_get_settings or smth
 
-void gameinfo_load_config(GameInfo *GameSettings);
 
 #endif

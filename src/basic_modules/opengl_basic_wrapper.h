@@ -14,7 +14,7 @@
 
 // Initialization
 void opengl_context_init();
-void opengl_glad_load();
+void glad_init();
 void opengl_print_error();
 void window_validate(GLFWwindow *window);
 

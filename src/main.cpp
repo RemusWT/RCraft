@@ -13,13 +13,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 int main() {
     printf("Hello, Sailor!\n");
     glfwInit();
+    opengl_context_init();
     
     GameInfo GInfo;
-    gameinfo_load_config(&GInfo);
-    GInfo.window_init();    
-    opengl_context_init();
-    opengl_glad_load();
-
+    GInfo.load_config();
     
     Shader defaultShader(defaultVertexSource.c_str(), defaultFragmentSource.c_str());
     defaultShader.use();
@@ -35,11 +32,8 @@ int main() {
     VAO_.attribute(0, 3, GL_FLOAT, 3, 0);
     opengl_print_error();
     
-    glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback);
     glfwSetKeyCallback(GInfo.window, key_callback);
-
-    GInfo.set_vsync(true);
 
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

@@ -5,12 +5,12 @@ void opengl_context_init() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
-
-void opengl_glad_load() {
+void glad_init() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         printf("Failed to initialize GLAD.\n");
     }
 }
+
 
 void window_validate(GLFWwindow *window) {
     if (window == NULL) {

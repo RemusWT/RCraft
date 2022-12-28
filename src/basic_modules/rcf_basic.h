@@ -18,9 +18,10 @@
 
 
 // We might want to add rcf_fetch_boolean function.
-int    rcf_fetch_ivalue(std::string data, const char* variable_name);
-float  rcf_fetch_fvalue(std::string data, const char* variable_name);
+int         rcf_fetch_ivalue(std::string data, const char* variable_name);
+float       rcf_fetch_fvalue(std::string data, const char* variable_name);
 std::string rcf_fetch_svalue(std::string data, const char* variable_name);
+bool        rcf_fetch_bvalue(std::string data, const char* variable_name);
 
 
 
