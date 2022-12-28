@@ -1,7 +1,7 @@
 #include "basic_modules/opengl_basic_wrapper.h"
 #include "basic_modules/input_basic.h"
 #include "basic_modules/rcf_basic.h"
-#include "gamesettings.h"
+#include "gameinfo.h"
 #include "render/render_internals.h"
 
 
@@ -12,17 +12,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 int main() {
     printf("Hello, Sailor!\n");
-    
-    GameSettings_ GameSettings;
-    gamesettings_load_config(&GameSettings);
     glfwInit();
+    
+    GameInfo GInfo;
+    gameinfo_load_config(&GInfo);
+    GInfo.window_init();    
     opengl_context_init();
-
-
-    GLFWwindow* window = glfwCreateWindow(GameSettings.resolution_x, GameSettings.resolution_y, "RCraft", NULL, NULL);
-    glfwMakeContextCurrent(window);
     opengl_glad_load();
 
+    
     Shader defaultShader(defaultVertexSource.c_str(), defaultFragmentSource.c_str());
     defaultShader.use();
     
@@ -38,12 +36,12 @@ int main() {
     opengl_print_error();
     
     glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetKeyCallback(window, key_callback);
+    glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback);
+    glfwSetKeyCallback(GInfo.window, key_callback);
 
-    GameSettings.set_vsync(true);
+    GInfo.set_vsync(true);
 
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
@@ -52,7 +50,7 @@ int main() {
         glDrawArrays(GL_TRIANGLES, 0, 3);
         opengl_print_error();
         
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(GInfo.window);
         glfwPollEvents();
     }
 
