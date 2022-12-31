@@ -19,11 +19,11 @@ void window_validate(GLFWwindow *window) {
     }
 }
 
-void opengl_print_error() {
+void opengl_check_error(const char* error_at) {
     GLenum error = glGetError();
+    if (error == GL_NO_ERROR) return;
+    printf("GL Error at location: %s\n", error_at);
     switch (error) {
-    case GL_NO_ERROR:
-        break;
     case GL_INVALID_ENUM:
         printf("GL_INVALID_ENUM detected! Enumeration parameter is not legal.\n");
         break;

@@ -5,27 +5,29 @@
 
 Shader::Shader(const char* vertexSource, const char* fragmentSource) {
     ID = glCreateProgram();
-    
     u32 vertexShader, fragmentShader;
     vertexShader   = glCreateShader(GL_VERTEX_SHADER);
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
+    
     shaders_vertex_compile(vertexShader, vertexSource);
     shaders_fragment_compile(fragmentShader, fragmentSource);
     shaders_program_link(ID, vertexShader, fragmentShader);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+    opengl_check_error("Shader Constructor");
 }
 void Shader::use() {
     glUseProgram(ID);
 }
-void Shader::set1Float(const char* name, float value) {
+void Shader::set1Float(const char* name, float value) { // what the fuck?
     glUniform1f(glGetUniformLocation(ID, name), value);
+    opengl_check_error("Shader::set1Float function");
 }
 void Shader::set3Float(const char* name, Floats3 vector) {
     int uniformLocation = glGetUniformLocation(ID, name);
     glUniform3f(uniformLocation, vector.float1, vector.float2, vector.float3);
+    opengl_check_error("Shader::set3Float");
 }
 void Shader::set4Float(const char* name, Floats4 vector) {
     int uniformLocation = glGetUniformLocation(ID, name);
@@ -46,6 +48,7 @@ void shaders_vertex_compile(u32 vertexShader, const char* VertexShaderSource) {
         printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n%s\n", infolog);
     }
     else printf("Vertex Shader compiled successfuly.\n");
+    opengl_check_error("shaders_vertex_compile()");
 }
 
 void shaders_fragment_compile(u32 fragmentShader, const char* fragmentShaderSource) {
