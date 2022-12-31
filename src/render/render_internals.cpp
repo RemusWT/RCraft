@@ -16,7 +16,7 @@ Texture::Texture(const char* filepath) {
     stbi_image_free(data);
 }
 
-void Texture::texture_filtering(GLint filter) {
+void Texture::texture_filtering(GLint filter) { // designed for 3D graphics, not pixelart!!!
     glBindTexture(GL_TEXTURE_2D, ID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
