@@ -14,8 +14,9 @@ typedef struct Texture {
     std::string type; // was made because of learnopengl.com
     int width, height, nrChannels; // I keep this info for now. Might be useful to have these variables.
     Texture(const char* filepath);
-    void textureFiltering(GLint filter);
-    void updateTexture(const char* filepath);
+    void texture_filtering(GLint filter);
+    void texture_wrapping(GLint wrap_state);
+    void update_texture(const char* filepath);
 } Texture;
 
 

@@ -1,4 +1,7 @@
 #include "basic_modules/opengl_basic_wrapper.h"
+#include "basic_modules/glm/glm.hpp"
+#include "basic_modules/glm/gtc/matrix_transform.hpp"
+#include "basic_modules/glm/gtc/type_ptr.hpp"
 #include "basic_modules/input_basic.h"
 #include "basic_modules/rcf_basic.h"
 #include "gameinfo.h"
@@ -73,10 +76,13 @@ int main() {
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
     
     Texture cube_texture("../../../asset/container.jpg"); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
-    cube_texture.textureFiltering(GL_LINEAR);
+    cube_texture.texture_wrapping(GL_REPEAT);
+    cube_texture.texture_filtering(GL_LINEAR_MIPMAP_LINEAR);
+    /*glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
+    transform = glm::rotate(transform, (float)glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));*/
     
-    glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback);
-    
+    glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
     glfwSetKeyCallback(GInfo.window, key_callback);
 
 
