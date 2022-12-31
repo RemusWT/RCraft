@@ -17,8 +17,9 @@ int main() {
     
     GameInfo GInfo;
     GInfo.load_config();
-    
-    Shader defaultShader(defaultVertexSource.c_str(), defaultFragmentSource.c_str());
+    std::string loaded_vertex_source = file_get_contents("vertex.glsl");
+    std::string loaded_fragment_source = file_get_contents("fragment.glsl");
+    Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
     defaultShader.use();
     
     std::vector<float> vertices = {
@@ -65,11 +66,12 @@ int main() {
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
     VAO VAO_;
-    VBO VBO_(vertices.data, vertices.size() * sizeof(float));
+    VBO VBO_(vertices.data(), vertices.size() * sizeof(float));
     
     VAO_.attribute(0, 3, GL_FLOAT, 5, 0);
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
-    //Texture cube_texture("../../../asset/cube_texture.png");
+    Texture cube_texture("../../../asset/cube_texture.png");
+    cube_texture.textureFiltering(GL_REPEAT);
     opengl_print_error();
     
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback);
@@ -81,7 +83,7 @@ int main() {
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
         }
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         opengl_print_error();
         
         glfwSwapBuffers(GInfo.window);
