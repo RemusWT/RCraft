@@ -75,9 +75,8 @@ int main() {
     VAO_.attribute(0, 3, GL_FLOAT, 5, 0);
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
     
-    Texture cube_texture("../../../asset/container.jpg"); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
-    cube_texture.texture_wrapping(GL_REPEAT);
-    cube_texture.texture_filtering(GL_LINEAR_MIPMAP_LINEAR);
+    Texture cube_texture("../../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
+    
     /*glm::mat4 transform = glm::mat4(1.0f);
     transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
     transform = glm::rotate(transform, (float)glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));*/
@@ -89,10 +88,12 @@ int main() {
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
         }
         glDrawArrays(GL_TRIANGLES, 0, 12);
+        opengl_check_error("While loop");
         
         
         glfwSwapBuffers(GInfo.window);
