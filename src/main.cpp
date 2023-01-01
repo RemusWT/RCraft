@@ -1,11 +1,9 @@
 #include "basic_modules/opengl_basic_wrapper.h"
-#include "basic_modules/glm/glm.hpp"
-#include "basic_modules/glm/gtc/matrix_transform.hpp"
-#include "basic_modules/glm/gtc/type_ptr.hpp"
 #include "basic_modules/input_basic.h"
 #include "basic_modules/rcf_basic.h"
 #include "gameinfo.h"
 #include "render/render_internals.h"
+#include "camera.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -76,14 +74,16 @@ int main() {
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
     
     Texture cube_texture("../../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
+
+    Camera PlayerCamera;
     
     glm::mat4 model_matrix = glm::mat4(1.0f);
-    glm::mat4 view_matrix  = glm::mat4(1.0f);
     glm::mat4 proj_matrix  = glm::mat4(1.0f);
-    view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -2.0f));
-    proj_matrix = glm::perspective(glm::radians(45.0f),(float)(GInfo.resolution_x/GInfo.resolution_y), 0.1f, 100.0f);
+    
+    proj_matrix = glm::perspective(glm::radians(45.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
+    
     defaultShader.set4MatUniform("model_matrix", model_matrix);
-    defaultShader.set4MatUniform("view_matrix",  view_matrix);
+    defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
     defaultShader.set4MatUniform("proj_matrix",  proj_matrix);
     
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
@@ -98,18 +98,19 @@ int main() {
             break;
         }
         if (Input.is_key_pressed(GLFW_KEY_D)) {
-            view_matrix = glm::translate(view_matrix, glm::vec3(-0.2f, 0.0f, 0.0f));
+            PlayerCamera.position.x += 0.1f;
         }
         if (Input.is_key_pressed(GLFW_KEY_A)) {
-            view_matrix = glm::translate(view_matrix, glm::vec3(0.2f, 0.0f, 0.0f));
+            PlayerCamera.position.x -= 0.1f;
         }
         if (Input.is_key_pressed(GLFW_KEY_S)) {
-            view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -0.2f));
+            PlayerCamera.position.z += 0.1f;
         }
         if (Input.is_key_pressed(GLFW_KEY_W)) {
-            view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, 0.2f));
+            PlayerCamera.position.z -= 0.1f;
         }
-        defaultShader.set4MatUniform("view_matrix",  view_matrix);
+        PlayerCamera.freelook();
+        defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         opengl_check_error("While loop");
         
