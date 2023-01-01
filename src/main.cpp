@@ -4,6 +4,7 @@
 #include "gameinfo.h"
 #include "render/render_internals.h"
 #include "camera.h"
+#include "clock.h"
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -90,6 +91,7 @@ int main() {
     glfwSetKeyCallback(GInfo.window, key_callback);
 
     glEnable(GL_DEPTH_TEST);
+    Clock GameClock;
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -97,26 +99,17 @@ int main() {
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
         }
-        if (Input.is_key_pressed(GLFW_KEY_D)) {
-            PlayerCamera.position.x += 0.1f;
-        }
-        if (Input.is_key_pressed(GLFW_KEY_A)) {
-            PlayerCamera.position.x -= 0.1f;
-        }
-        if (Input.is_key_pressed(GLFW_KEY_S)) {
-            PlayerCamera.position.z += 0.1f;
-        }
-        if (Input.is_key_pressed(GLFW_KEY_W)) {
-            PlayerCamera.position.z -= 0.1f;
-        }
-        PlayerCamera.freelook();
-        defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
+        
+        PlayerCamera.freelook(defaultShader);
+        PlayerCamera.process_input(GameClock.deltatime);
+        
         glDrawArrays(GL_TRIANGLES, 0, 36);
         opengl_check_error("While loop");
         
         
         glfwSwapBuffers(GInfo.window);
         glfwPollEvents();
+        GameClock.update();
     }
 
     
