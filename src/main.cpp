@@ -77,9 +77,14 @@ int main() {
     
     Texture cube_texture("../../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
     
-    /*glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
-    transform = glm::rotate(transform, (float)glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));*/
+    glm::mat4 model_matrix = glm::mat4(1.0f);
+    glm::mat4 view_matrix  = glm::mat4(1.0f);
+    glm::mat4 proj_matrix  = glm::mat4(1.0f);
+    view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -2.0f));
+    proj_matrix = glm::perspective(glm::radians(45.0f),(float)(GInfo.resolution_x/GInfo.resolution_y), 0.1f, 100.0f);
+    defaultShader.set4MatUniform("model_matrix", model_matrix);
+    defaultShader.set4MatUniform("view_matrix",  view_matrix);
+    defaultShader.set4MatUniform("proj_matrix",  proj_matrix);
     
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
     glfwSetKeyCallback(GInfo.window, key_callback);

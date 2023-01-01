@@ -57,6 +57,7 @@ typedef struct Shader{ // @TODO Add uniform functions.
     void set1Float(const char* name, float value);
     void set3Float(const char* name, Floats3 vector);
     void set4Float(const char* name, Floats4 vector);
+    void set4MatUniform(const char* name, glm::mat4 value);
     
 } Shader;
 
