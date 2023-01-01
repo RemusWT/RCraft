@@ -89,15 +89,28 @@ int main() {
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
     glfwSetKeyCallback(GInfo.window, key_callback);
 
-
+    glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
         }
-        glDrawArrays(GL_TRIANGLES, 0, 12);
+        if (Input.is_key_pressed(GLFW_KEY_D)) {
+            view_matrix = glm::translate(view_matrix, glm::vec3(-0.2f, 0.0f, 0.0f));
+        }
+        if (Input.is_key_pressed(GLFW_KEY_A)) {
+            view_matrix = glm::translate(view_matrix, glm::vec3(0.2f, 0.0f, 0.0f));
+        }
+        if (Input.is_key_pressed(GLFW_KEY_S)) {
+            view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, -0.2f));
+        }
+        if (Input.is_key_pressed(GLFW_KEY_W)) {
+            view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, 0.0f, 0.2f));
+        }
+        defaultShader.set4MatUniform("view_matrix",  view_matrix);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         opengl_check_error("While loop");
         
         
