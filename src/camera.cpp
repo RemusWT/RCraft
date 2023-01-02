@@ -6,7 +6,7 @@ void Camera::freelook(Shader current_shader) { // not to be confused with look_a
 }
 
 void Camera::process_input(double deltatime) {
-    float speed = movespeed * deltatime; // should create a variable in struct scope so we dont alloc each time?
+    float speed; // should create a variable in struct scope so we dont alloc each time?
     velocity = vector3_zero();
     
     if (Input.is_key_pressed(GLFW_KEY_D)) {
@@ -27,9 +27,14 @@ void Camera::process_input(double deltatime) {
     if (Input.is_key_pressed(GLFW_KEY_SPACE)) {
         velocity.y += 1.0f;
     }
+    if (Input.is_key_pressed(GLFW_KEY_LEFT_ALT)) {
+        speed = (movespeed/2) * deltatime;
+    } else speed = movespeed * deltatime;
+    
     velocity = vector3_normalize(velocity);
     position.x += velocity.x * speed;
     position.y += velocity.y * speed;
     position.z += velocity.z * speed;
+    printf("Velocity: %f %f %f\n", velocity.x, velocity.y, velocity.z);
     
 }
