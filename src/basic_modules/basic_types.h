@@ -17,16 +17,13 @@ typedef int32_t   s32;
 typedef int16_t   s16;
 typedef int8_t    s8;
 
-typedef struct Floats3{
-    float float1, float2, float3;
-    Floats3(float float1_, float flaot2_, float float3_);
-} Float3;
 
-typedef struct Floats4{
-    float float1, float2, float3, float4;
-    Floats4(float float1_, float flaot2_, float float3_, float float4_);
-} Floats4;
+typedef struct Vector3 {
+    float x, y, z;
+} Vector3;
 
+Vector3 vector3_normalize(Vector3 vector);
+Vector3 vector3_zero();
 
 #endif
 

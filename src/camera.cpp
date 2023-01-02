@@ -6,18 +6,30 @@ void Camera::freelook(Shader current_shader) { // not to be confused with look_a
 }
 
 void Camera::process_input(double deltatime) {
-    velocity = movespeed * deltatime;
-    // @Bug after holding a button it will stop. That's because the key is not pressed anymore but HELD.
+    float speed = movespeed * deltatime; // should create a variable in struct scope so we dont alloc each time?
+    velocity = vector3_zero();
+    
     if (Input.is_key_pressed(GLFW_KEY_D)) {
-        position.x += velocity;
+        velocity.x += 1.0f;
     }
     if (Input.is_key_pressed(GLFW_KEY_A)) {
-        position.x -= velocity;
+        velocity.x += -1.0f;
     }
     if (Input.is_key_pressed(GLFW_KEY_S)) {
-        position.z += velocity;
+        velocity.z += 1.0f;
     }
     if (Input.is_key_pressed(GLFW_KEY_W)) {
-        position.z -= velocity;
+        velocity.z += -1.0f;
     }
+    if (Input.is_key_pressed(GLFW_KEY_LEFT_SHIFT)) {
+        velocity.y += -1.0f;
+    }
+    if (Input.is_key_pressed(GLFW_KEY_SPACE)) {
+        velocity.y += 1.0f;
+    }
+    velocity = vector3_normalize(velocity);
+    position.x += velocity.x * speed;
+    position.y += velocity.y * speed;
+    position.z += velocity.z * speed;
+    
 }

@@ -19,17 +19,6 @@ Shader::Shader(const char* vertexSource, const char* fragmentSource) {
 void Shader::use() {
     glUseProgram(ID);
 }
-void Shader::set1Float(const char* name, float value) { // what the fuck?
-    glUniform1f(glGetUniformLocation(ID, name), value);
-}
-void Shader::set3Float(const char* name, Floats3 vector) { // these setXFloat functions seems useless, what the
-    int uniformLocation = glGetUniformLocation(ID, name);
-    glUniform3f(uniformLocation, vector.float1, vector.float2, vector.float3);
-}
-void Shader::set4Float(const char* name, Floats4 vector) {
-    int uniformLocation = glGetUniformLocation(ID, name);
-    glUniform4f(uniformLocation, vector.float1, vector.float2, vector.float3, vector.float4);
-}
 
 void Shader::set4MatUniform(const char* name, glm::mat4 value) {
     int uniformLocation = glGetUniformLocation(ID, name);

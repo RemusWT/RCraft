@@ -2,7 +2,7 @@
 
 bool KeyInfo::is_key_pressed(int key) {
     if (keys[key].key == key) {
-        if (keys[key].action == GLFW_PRESS) {
+        if (keys[key].action == GLFW_PRESS || keys[key].action == GLFW_REPEAT) {
             return true;
         }
     } return false;

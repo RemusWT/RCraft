@@ -81,7 +81,7 @@ int main() {
     glm::mat4 model_matrix = glm::mat4(1.0f);
     glm::mat4 proj_matrix  = glm::mat4(1.0f);
     
-    proj_matrix = glm::perspective(glm::radians(45.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
+    proj_matrix = glm::perspective(glm::radians(70.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
     
     defaultShader.set4MatUniform("model_matrix", model_matrix);
     defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
