@@ -14,6 +14,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 int main() {
     printf("Hello, Sailor!\n");
+
     glfwInit();
     opengl_context_init();
     

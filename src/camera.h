@@ -7,9 +7,10 @@
 typedef struct Camera {
     glm::mat4 view_matrix = glm::mat4(1.0f);
     
-    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 up       = glm::vec3(0.0f, 1.0f, 0.0f);
-    glm::vec3 front    = glm::vec3(0.0f, 0.0f, -1.0f);
+
+    Vector3 position = {0.0f, 0.0f, 0.0f};
+    Vector3 up       = {0.0f, 1.0f, 0.0f};
+    Vector3 front    = {0.0f, 0.0f, -1.0f};
     float movespeed = 1.0f;
     Vector3 velocity;
     void freelook(Shader current_shader);

@@ -6,7 +6,7 @@
 #include <fstream>
 #include <string>
 #include <map>
-
+#include <cmath>
 
 typedef uint64_t  u64;
 typedef uint32_t  u32;
@@ -17,9 +17,14 @@ typedef int32_t   s32;
 typedef int16_t   s16;
 typedef int8_t    s8;
 
-
+// bad idea to use a different vector3 struct
 typedef struct Vector3 {
     float x, y, z;
+    Vector3 operator + (Vector3 rvec) {
+        x += rvec.x;
+        y += rvec.y;
+        z += rvec.z;
+    }
 } Vector3;
 
 Vector3 vector3_normalize(Vector3 vector);

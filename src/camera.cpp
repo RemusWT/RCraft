@@ -1,7 +1,7 @@
 #include "camera.h"
 
 void Camera::freelook(Shader current_shader) { // not to be confused with look_at. we only look what is in front of the camera.
-    view_matrix = glm::lookAt(position, position + front, up);
+    view_matrix = glm::lookAt(position, vector3_glm(position + front), up);
     current_shader.set4MatUniform("view_matrix", view_matrix);
 }
 
@@ -30,7 +30,8 @@ void Camera::process_input(double deltatime) {
     if (Input.is_key_pressed(GLFW_KEY_LEFT_ALT)) {
         speed = (movespeed/2) * deltatime;
     } else speed = movespeed * deltatime;
-    
+
+    printf("Velocity before normalize: %f %f %f\n", velocity.x, velocity.y, velocity.z);
     velocity = vector3_normalize(velocity);
     position.x += velocity.x * speed;
     position.y += velocity.y * speed;
