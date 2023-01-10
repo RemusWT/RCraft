@@ -27,7 +27,13 @@ void Camera::process_input(double deltatime) {
     if (Input.is_key_pressed(GLFW_KEY_SPACE)) {
         velocity.y += 1.0f;
     }
+    if (Input.is_key_released(GLFW_KEY_LEFT_ALT)) { // @Bug toggling movespeed sometimes doesn't work.
+        if (moving_fast) {movespeed = 0.5f; moving_fast = false;}
+        else {movespeed = 1.0f; moving_fast = true;}
+    }
+
     velocity = vector3_normalize(velocity);
+
     position.x += velocity.x * speed;
     position.y += velocity.y * speed;
     position.z += velocity.z * speed;
