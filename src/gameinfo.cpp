@@ -51,3 +51,9 @@ GameInfo::GameInfo() {
     glad_init();
 }
 
+void GameInfo::hide_cursor() {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+void GameInfo::show_cursor() {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}

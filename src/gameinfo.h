@@ -16,6 +16,8 @@ typedef struct GameInfo {
     void set_vsync(bool state);
     void set_viewport(int res_x, int res_y);
     void load_config();
+    void hide_cursor();
+    void show_cursor();
 } GameInfo;
 
 std::string gameinfo_get_fileconfig(); // Should change it to gameinfo_get_settings or smth
