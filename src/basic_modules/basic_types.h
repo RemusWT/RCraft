@@ -7,6 +7,10 @@
 #include <string>
 #include <map>
 #include <cmath>
+<<<<<<< HEAD
+=======
+
+>>>>>>> old_commit
 
 typedef uint64_t  u64;
 typedef uint32_t  u32;

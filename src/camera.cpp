@@ -27,12 +27,21 @@ void Camera::process_input(double deltatime) {
     if (Input.is_key_pressed(GLFW_KEY_SPACE)) {
         velocity.y += 1.0f;
     }
+<<<<<<< HEAD
     if (Input.is_key_pressed(GLFW_KEY_LEFT_ALT)) {
         speed = (movespeed/2) * deltatime;
     } else speed = movespeed * deltatime;
 
     printf("Velocity before normalize: %f %f %f\n", velocity.x, velocity.y, velocity.z);
+=======
+    if (Input.is_key_released(GLFW_KEY_LEFT_ALT)) { // @Bug toggling movespeed sometimes doesn't work.
+        if (moving_fast) {movespeed = 0.5f; moving_fast = false;}
+        else {movespeed = 1.0f; moving_fast = true;}
+    }
+
+>>>>>>> old_commit
     velocity = vector3_normalize(velocity);
+
     position.x += velocity.x * speed;
     position.y += velocity.y * speed;
     position.z += velocity.z * speed;
