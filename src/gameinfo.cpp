@@ -46,7 +46,7 @@ void GameInfo::load_config() {
     
 }
 GameInfo::GameInfo() {
-    window = glfwCreateWindow(800, 600, "RCraft", NULL, NULL);
+    window = glfwCreateWindow(800, 600, "RCraft", NULL, NULL); // We resize the window in another function. @Refactor Maybe we should do it in this one too.
     glfwMakeContextCurrent(window);
     glad_init();
 }
@@ -57,3 +57,5 @@ void GameInfo::hide_cursor() {
 void GameInfo::show_cursor() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
+
+

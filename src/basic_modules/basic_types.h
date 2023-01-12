@@ -26,6 +26,13 @@ typedef struct Vector3 {
         z += rvec.z;
     }
 } Vector3;
+typedef struct Vector2 {
+    float x, y;
+    Vector2 operator + (Vector2 rvec) {
+        x += rvec.x;
+        y += rvec.y;
+    }
+} Vector2;
 
 Vector3 vector3_normalize(Vector3 vector);
 Vector3 vector3_zero();

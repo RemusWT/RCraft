@@ -7,8 +7,16 @@
 #include "clock.h"
 
 
+// @Bug There is a major problem between Release mode and Debug mode in VS.
+// It needs to be resolved at some point. Debug mode compiles and runs just fine.
+// Release mode compiles ok but there are problems. Nothing renderings. The shaders don't compile.
+
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+}
+
+void cursor_callback(GLFWwindow* window, double xpos, double ypos) { //@Refactor should be moved somewhere else
 }
 
 
@@ -77,7 +85,7 @@ int main() {
     
     Texture cube_texture("../../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
 
-    Camera PlayerCamera;
+    Camera PlayerCamera(&GInfo);
     
     glm::mat4 model_matrix = glm::mat4(1.0f);
     glm::mat4 proj_matrix  = glm::mat4(1.0f);
@@ -94,6 +102,9 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     Clock GameClock;
     GInfo.hide_cursor();
+
+    glfwSetCursorPosCallback(GInfo.window, cursor_callback);
+    
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
