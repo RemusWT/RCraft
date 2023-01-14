@@ -38,8 +38,6 @@ void Camera::process_input(double deltatime) {
         printf("Moving fast: %i\n", moving_fast);
     }
 
-    velocity = vector3_normalize(velocity);
-
     
     double mouse_current_x, mouse_current_y;
     glfwGetCursorPos(ginfo->window, &mouse_current_x, &mouse_current_y);
