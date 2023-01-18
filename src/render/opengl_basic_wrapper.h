@@ -1,13 +1,13 @@
 #ifndef opengl_basic_wrapper_h
 #define opengl_basic_wrapper_h
 
-#include "basic_types.h"
+#include "../utils/basic_types.h"
 #include "../../includes/glad/glad.h"
 #include "../../includes/glfw/glfw3.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include "filesystem_basic.h"
+#include "../../includes/glm/glm.hpp"
+#include "../../includes/glm/gtc/matrix_transform.hpp"
+#include "../../includes/glm/gtc/type_ptr.hpp"
+#include "../utils/filesystem_basic.h"
 #include "stb_image.h"
 
 

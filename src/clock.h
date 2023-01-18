@@ -1,6 +1,6 @@
 #ifndef clock_h
 #define clock_h
-#include "basic_modules/opengl_basic_wrapper.h"
+#include "render/opengl_basic_wrapper.h"
 
 // @Refactor maybe we should move this to gameinfo.h
 

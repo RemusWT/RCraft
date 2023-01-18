@@ -1,8 +1,8 @@
 #ifndef gameinfo_h
 #define gameinfo_h
 
-#include "basic_modules/opengl_basic_wrapper.h"
-#include "basic_modules/rcf_basic.h"
+#include "render/opengl_basic_wrapper.h"
+#include "utils/rcf_basic.h"
 
 
 

@@ -1,8 +1,8 @@
 
 #ifndef camera_h
 #define camera_h
-#include "basic_modules/opengl_basic_wrapper.h"
-#include "basic_modules/input_basic.h"
+#include "render/opengl_basic_wrapper.h"
+#include "input_basic.h"
 #include "gameinfo.h"
 
 typedef struct Camera {

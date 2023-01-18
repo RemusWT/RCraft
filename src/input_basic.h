@@ -1,8 +1,8 @@
 #ifndef input_basic_h
 
 #define input_basic_h
-#include "basic_types.h"
-#include "opengl_basic_wrapper.h"
+#include "utils/basic_types.h"
+#include "render/opengl_basic_wrapper.h"
 // NOTE: When we are making themes for Emendo make sure to make one dedicated for Sonar Systems.
 
 
