@@ -3,11 +3,13 @@ CC = clang++
 CFlags = -Werror -Wall -Wextra -Wconversion -Wunreachable-code -Wuninitialized -Wno-error=unused-variable
 
 SRC = $(wildcard src/**/*.cpp)
-OBJ = main.o
+OBJ = $(SRC:.c=.o)
+
+BINARY = RCraft
 
 
-testing: $(OBJ)
-	$(CC) $(OBJ) -o testing
+$(BINARY): $(OBJ)
+	$(CC) $(OBJ) -o bin/x64/$(BINARY)
 
 %.o: %.cpp
 	$(CC) $(CFlags) -c -o $@ $^
