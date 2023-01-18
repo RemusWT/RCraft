@@ -11,27 +11,36 @@ void Camera::freelook(Shader current_shader) { // not to be confused with look_a
 
 void Camera::process_input(double deltatime) {
     float speed = movespeed * deltatime; // should create a variable in struct scope so we dont alloc each time?
+    glm::vec3 direction = glm::vec3(0.0f);
 
-    // @Bug We are moving faster diagonaly.
+    // Player movement relative to camera's orientation. I don't fully understand my own implementation, but it works.
+
     if (Input.is_key_pressed(GLFW_KEY_D)) {
-        position += glm::normalize(glm::cross(front, up)) * speed;
+        direction.x += 1;
     }
     if (Input.is_key_pressed(GLFW_KEY_A)) {
-        position -= glm::normalize(glm::cross(front, up)) * speed;
+        direction.x -= 1;
     }
     if (Input.is_key_pressed(GLFW_KEY_S)) {
-        position -= speed * front;
+        direction.z -= 1;
     }
     if (Input.is_key_pressed(GLFW_KEY_W)) {
-        position += speed * front;
+        direction.z += 1;
     }
     if (Input.is_key_pressed(GLFW_KEY_LEFT_SHIFT)) {
-        position.y -= speed;
+        direction.y -= 1;
     }
     if (Input.is_key_pressed(GLFW_KEY_SPACE)) {
-        position.y += speed;
+        direction.y += 1;
     }
 
+    float length = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z;
+    if (length != 0.0f) direction = glm::normalize(direction);
+
+    position   += direction.x * glm::normalize(glm::cross(front, up)) * speed;
+    position   += direction.z * front * speed;
+    position.y += direction.y * speed; // this looks odd bcs its an exception, we don't change the y value relative to the camera.
+ 
     if (Input.is_key_pressed(GLFW_KEY_LEFT_ALT)) { // @Bug toggling movespeed sometimes doesn't work.
         if (moving_fast) {movespeed = 0.5f; moving_fast = false;}
         else {movespeed = 1.0f; moving_fast = true;}

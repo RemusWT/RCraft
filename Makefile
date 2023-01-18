@@ -1,8 +1,9 @@
 
 CC = clang++
 # -Wconversion 
+# -Xinerama
 CFlags = -Werror -Wall -Wextra  -Wunreachable-code -Wuninitialized -Wno-error=unused-variable -Wno-error=unused-parameter
-LFlags = -lglfw3 -lGL -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -Xinerama -lXcursor
+LFlags = -lglfw3 -lGL -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXcursor
 
 SRC = $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 OBJ = $(SRC:.cpp=.o)
