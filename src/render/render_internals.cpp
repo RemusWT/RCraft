@@ -9,7 +9,7 @@ Texture::Texture(const char* filepath, GLenum texture_type, GLenum slot, GLenum 
     unsigned char *data;
     data = stbi_load(filepath, &width, &height, &nrChannels, 0);
     if (data == NULL ) { // stbi_load shouldn't return an invalid address
-        data = stbi_load("../../../asset/error_texture.jpg", &width, &height, &nrChannels, 0);
+        data = stbi_load("../../asset/error_texture.jpg", &width, &height, &nrChannels, 0);
     }
     
     glTexParameteri(texture_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

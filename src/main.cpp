@@ -29,8 +29,8 @@ int main() {
     GameInfo GInfo;
     GInfo.load_config();
 
-    std::string loaded_vertex_source = file_get_contents("vertex.glsl");
-    std::string loaded_fragment_source = file_get_contents("frag.glsl");
+    std::string loaded_vertex_source = file_get_contents("../../asset/shaders/vertex.glsl");
+    std::string loaded_fragment_source = file_get_contents("../../asset/shaders/frag.glsl");
     Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
     defaultShader.use();
     opengl_check_error("Before cube model vertices");
@@ -84,7 +84,7 @@ int main() {
     VAO_.attribute(0, 3, GL_FLOAT, 5, 0);
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
     opengl_check_error("Before cube_texture");
-    Texture cube_texture("../../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
+    Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
 
     Camera PlayerCamera(&GInfo);
     
