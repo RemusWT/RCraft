@@ -6,33 +6,33 @@
 int rcf_fetch_ivalue(std::string data, const char* variable_name) {
     // checking if the variable exists.
     size_t variable_name_position = data.find(variable_name, 0);
-    if (variable_name_position == -1) {
+    if (variable_name_position == (u64)-1) {
         printf("rcf_fetch_ivalue error: Variable '%s' was not found. Config file either doesn't contain such variable or there was a misspelling.\n", variable_name);
         return 0;
     }
 
     // checking how much to copy.
     size_t equal_pos = data.find('=', variable_name_position);
-    if (equal_pos == -1) {
+    if (equal_pos == (u64)-1) {
         printf("rcf_fetch_ivalue error: Variable \"%s\" is incorrectly formatted. Equal sign not found.\n", variable_name);
         return 0;
     }
     
     size_t newline_pos = data.find('\n', equal_pos); // NOTE: Right now we are requiring the file to have a \n.
-    if (newline_pos == -1) {
+    if (newline_pos == (u64)-1) {
         printf("rcf_fetch_ivalue error: Variable \"%s\" is incorrectly formatted. Newline character not found.\n", variable_name);
         return 0;
     }
     
     size_t value_size  = newline_pos - equal_pos;
-    if ((value_size - 1) == 0) { // Checking if there is no space between the equal sign and the newline character
+    if ((value_size - 1) == (u64)0) { // Checking if there is no space between the equal sign and the newline character
         printf("rcf_fetch_ivalue error: The value of %s is empty or incorrectly formatted.\n", variable_name);
         return 0;
     }
 
     std::string copied_string_value;
     copied_string_value = data.substr(equal_pos + 1, value_size-1); // basically slicing the string
-    for (int i = 0; i < copied_string_value.length(); i++) { // erasing blank characters.
+    for (int i = 0; (u64)i < copied_string_value.length(); i++) { // erasing blank characters.
         if (isblank(copied_string_value[i])) {
             copied_string_value.erase(i, 1);
         }
@@ -44,7 +44,7 @@ int rcf_fetch_ivalue(std::string data, const char* variable_name) {
     }
     
     int bad_value = 0;
-    for (int i = 0; i < copied_string_value.length(); i++) {
+    for (int i = 0; (u64) i < copied_string_value.length(); i++) {
         if (isalpha(copied_string_value[i])) {
             printf("rcf_fetch_ivalue error: Variable \"%s\" contains invalid value. Letters were detected.\n", variable_name);
             bad_value = 1;
@@ -61,33 +61,33 @@ int rcf_fetch_ivalue(std::string data, const char* variable_name) {
 
 float  rcf_fetch_fvalue(std::string data, const char* variable_name) {
     size_t variable_name_position = data.find(variable_name, 0);
-    if (variable_name_position == -1) {
+    if (variable_name_position == (u64)-1) {
         printf("rcf_fetch_fvalue error: Variable '%s' was not found. Config file either doesn't contain such variable or there was a misspelling.\n", variable_name);
         return 0;
     }
 
     // checking how much to copy.
     size_t equal_pos = data.find('=', variable_name_position);
-    if (equal_pos == -1) {
+    if (equal_pos == (u64)-1) {
         printf("rcf_fetch_fvalue error: Variable \"%s\" is incorrectly formatted. Equal sign not found.\n", variable_name);
         return 0;
     }
     
     size_t newline_pos = data.find('\n', equal_pos); // NOTE: Right now we are requiring the file to have a \n.
-    if (newline_pos == -1) {
+    if (newline_pos == (u64)-1) {
         printf("rcf_fetch_fvalue error: Variable \"%s\" is incorrectly formatted. Newline character not found.\n", variable_name);
         return 0;
     }
     
     size_t value_size  = newline_pos - equal_pos;
-    if ((value_size - 1) == 0) { // Checking if there is no space between the equal sign and the newline character
+    if ((value_size - 1) == (u64)0) { // Checking if there is no space between the equal sign and the newline character
         printf("rcf_fetch_fvalue error: The value of %s is empty or incorrectly formatted.\n", variable_name);
         return 0;
     }
     
     std::string copied_string_value;
     copied_string_value = data.substr(equal_pos + 1, value_size-1); // basically slicing the string
-    for (int i = 0; i < copied_string_value.length(); i++) { // erasing blank characters.
+    for (int i = 0; (u64) i < copied_string_value.length(); i++) { // erasing blank characters.
         if (isblank(copied_string_value[i])) {
             copied_string_value.erase(i, 1);
         }
@@ -99,7 +99,7 @@ float  rcf_fetch_fvalue(std::string data, const char* variable_name) {
     }
     
     int bad_value = 0;
-    for (int i = 0; i < copied_string_value.length(); i++) {
+    for (int i = 0; (u64) i < copied_string_value.length(); i++) {
         if (isalpha(copied_string_value[i])) {
             printf("rcf_fetch_fvalue error: Variable \"%s\" contains invalid value. Letters were detected.\n", variable_name);
             bad_value = 1;
@@ -117,33 +117,33 @@ float  rcf_fetch_fvalue(std::string data, const char* variable_name) {
 std::string rcf_fetch_svalue(std::string data, const char* variable_name) {
     // checking if the variable exists.
     size_t variable_name_position = data.find(variable_name, 0);
-    if (variable_name_position == -1) {
+    if (variable_name_position == (u64)-1) {
         printf("rcf_fetch_svalue error: Variable '%s' was not found. Config file either doesn't contain such variable or there was a misspelling.\n", variable_name);
         return 0;
     }
 
     // checking how much to copy.
     size_t equal_pos = data.find('=', variable_name_position);
-    if (equal_pos == -1) {
+    if (equal_pos == (u64)-1) {
         printf("rcf_fetch_svalue error: Variable \"%s\" is incorrectly formatted. Equal sign not found.\n", variable_name);
         return 0;
     }
     
     size_t newline_pos = data.find('\n', equal_pos); // NOTE: Right now we are requiring the file to have a \n.
-    if (newline_pos == -1) {
+    if (newline_pos == (u64)-1) {
         printf("rcf_fetch_svalue error: Variable \"%s\" is incorrectly formatted. Newline character not found.\n", variable_name);
         return 0;
     }
     
     size_t value_size  = newline_pos - equal_pos;
-    if ((value_size - 1) == 0) { // Checking if there is no space between the equal sign and the newline character
+    if ((value_size - 1) == (u64)0) { // Checking if there is no space between the equal sign and the newline character
         printf("rcf_fetch_svalue error: The value of %s is empty or incorrectly formatted.\n", variable_name);
         return 0;
     }
 
     std::string copied_string_value;
     copied_string_value = data.substr(equal_pos + 1, value_size-1); // basically slicing the string
-    for (int i = 0; i < copied_string_value.length(); i++) { // erasing blank characters.
+    for (int i = 0; (u64) i < copied_string_value.length(); i++) { // erasing blank characters.
         if (isblank(copied_string_value[i])) {
             copied_string_value.erase(i, 1);
         }
@@ -160,33 +160,33 @@ std::string rcf_fetch_svalue(std::string data, const char* variable_name) {
 bool rcf_fetch_bvalue(std::string data, const char* variable_name) {
     // checking if the variable exists.
     size_t variable_name_position = data.find(variable_name, 0);
-    if (variable_name_position == -1) {
+    if (variable_name_position == (u64)-1) {
         printf("rcf_fetch_svalue error: Variable '%s' was not found. Config file either doesn't contain such variable or there was a misspelling.\n", variable_name);
         return 0;
     }
 
     // checking how much to copy.
     size_t equal_pos = data.find('=', variable_name_position);
-    if (equal_pos == -1) {
+    if (equal_pos == (u64)-1) {
         printf("rcf_fetch_svalue error: Variable \"%s\" is incorrectly formatted. Equal sign not found.\n", variable_name);
         return 0;
     }
     
     size_t newline_pos = data.find('\n', equal_pos); // NOTE: Right now we are requiring the file to have a \n.
-    if (newline_pos == -1) {
+    if (newline_pos == (u64)-1) {
         printf("rcf_fetch_svalue error: Variable \"%s\" is incorrectly formatted. Newline character not found.\n", variable_name);
         return 0;
     }
     
     size_t value_size  = newline_pos - equal_pos;
-    if ((value_size - 1) == 0) { // Checking if there is no space between the equal sign and the newline character
+    if ((value_size - 1) == (u64)0) { // Checking if there is no space between the equal sign and the newline character
         printf("rcf_fetch_svalue error: The value of %s is empty or incorrectly formatted.\n", variable_name);
         return 0;
     }
 
     std::string copied_string_value;
     copied_string_value = data.substr(equal_pos + 1, value_size-1); // basically slicing the string
-    for (int i = 0; i < copied_string_value.length(); i++) { // erasing blank characters.
+    for (int i = 0; (u64)i < copied_string_value.length(); i++) { // erasing blank characters.
         if (isblank(copied_string_value[i])) {
             copied_string_value.erase(i, 1);
         }

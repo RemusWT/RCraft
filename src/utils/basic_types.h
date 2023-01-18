@@ -20,7 +20,7 @@ typedef int8_t    s8;
 // bad idea to use a different vector3 struct
 typedef struct Vector3 {
     float x, y, z;
-    Vector3 operator + (Vector3 rvec) {
+    void operator + (Vector3 rvec) {
         x += rvec.x;
         y += rvec.y;
         z += rvec.z;
@@ -28,7 +28,7 @@ typedef struct Vector3 {
 } Vector3;
 typedef struct Vector2 {
     float x, y;
-    Vector2 operator + (Vector2 rvec) {
+    void operator + (Vector2 rvec) {
         x += rvec.x;
         y += rvec.y;
     }
