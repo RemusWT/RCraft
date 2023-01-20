@@ -39,8 +39,9 @@ void Camera::process_input(double deltatime) {
 
     position   += direction.x * glm::normalize(glm::cross(front, up)) * speed;
     position   += direction.z * front * speed;
-    position.y += direction.y * speed; // this looks odd bcs its an exception, we don't change the y value relative to the camera.
- 
+
+    if (direction.y > 0) position.y += speed; // this looks odd bcs its an exception, we don't change the y value relative to the camera.
+    else if (direction.y < 0) position.y -= speed;
     if (Input.is_key_pressed(GLFW_KEY_LEFT_ALT)) { // @Bug toggling movespeed sometimes doesn't work.
         if (moving_fast) {movespeed = 0.5f; moving_fast = false;}
         else {movespeed = 1.0f; moving_fast = true;}
