@@ -5,7 +5,7 @@
 #include "render/render_internals.h"
 #include "camera.h"
 #include "clock.h"
-
+#include "font_rendering/font_render_internal.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
@@ -20,6 +20,7 @@ void cursor_callback(GLFWwindow* window, double xpos, double ypos) { //@Refactor
 }
 
 
+
 int main() {
     printf("Hello, Sailor!\n");
 
@@ -28,6 +29,64 @@ int main() {
     
     GameInfo GInfo;
     GInfo.load_config();
+    // Font rendering experimenting
+    FT_Library ft;
+    if (FT_Init_FreeType(&ft)) {
+        printf("Freetype error: could not init.\n");
+        return -1;
+    }
+    FT_Face face;
+    if (FT_New_Face(ft, "../../asset/fonts/alagard.ttf", 0, &face)) {
+        printf("Freetype error: Failed to load font.\n");
+        return -1;
+    }
+    FT_Set_Pixel_Sizes(face, 0 , 48);
+    if (FT_Load_Char(face, 'R', FT_LOAD_RENDER)) {
+        printf("Freetype error: Failed to load Glyph.\n");
+        return -1;
+    }
+    struct Character {
+        u32 TextureID;
+        glm::ivec2 Size;
+        glm::ivec2 Bearing;
+        u32 Advance;
+    };
+    std::map<char, Character> Characters;
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    for (unsigned char c = 0; c < 128; c++) {
+        if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+            printf("Freetype error: Failed to load Glyph %c", c);
+            continue;
+        }
+        u32 texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(
+            GL_TEXTURE_2D,
+            0,
+            GL_RED,
+            face->glyph->bitmap.width,
+            face->glyph->bitmap.rows,
+            0,
+            GL_RED,
+            GL_UNSIGNED_BYTE,
+            face->glyph->bitmap.buffer
+        );
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        struct Character character = {
+        texture, 
+        glm::ivec2(static_cast<u32>(face->glyph->bitmap.width), static_cast<u32>(face->glyph->bitmap.rows)),
+        glm::ivec2(static_cast<u32>(face->glyph->bitmap_left), static_cast<u32>(face->glyph->bitmap_top)),
+        static_cast<u32>(face->glyph->advance.x)
+    };
+        Characters.insert(std::pair<char, Character>(c, character));
+    }
+    FT_Done_Face(face);
+    FT_Done_FreeType(ft);
 
     std::string loaded_vertex_source = file_get_contents("../../asset/shaders/vertex.glsl");
     std::string loaded_fragment_source = file_get_contents("../../asset/shaders/frag.glsl");
