@@ -16,6 +16,7 @@ typedef struct Character {
 
 void load_font(FT_Library ft_handler, const char* font_location, FT_Face *font_handler);
 void set_font_pixelsize(FT_Face font, int width, int height);
-void load_font_character(FT_Face font, char character);
+int load_font_character(FT_Face font, char character);
+Character font_generate_character_texture(FT_Face font);
 
 #endif
