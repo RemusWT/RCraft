@@ -36,21 +36,10 @@ int main() {
         return -1;
     }
     FT_Face face;
-    if (FT_New_Face(ft, "../../asset/fonts/alagard.ttf", 0, &face)) {
-        printf("Freetype error: Failed to load font.\n");
-        return -1;
-    }
-    FT_Set_Pixel_Sizes(face, 0 , 48);
-    if (FT_Load_Char(face, 'R', FT_LOAD_RENDER)) {
-        printf("Freetype error: Failed to load Glyph.\n");
-        return -1;
-    }
-    struct Character {
-        u32 TextureID;
-        glm::ivec2 Size;
-        glm::ivec2 Bearing;
-        u32 Advance;
-    };
+    load_font(ft, "../../asset/fonts/alagard.ttf", &face);
+    set_font_pixelsize(face, 0, 48);
+    load_font_character(face, 'R');
+
     std::map<char, Character> Characters;
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -87,6 +76,9 @@ int main() {
     }
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
+
+
+
 
     std::string loaded_vertex_source = file_get_contents("../../asset/shaders/vertex.glsl");
     std::string loaded_fragment_source = file_get_contents("../../asset/shaders/frag.glsl");

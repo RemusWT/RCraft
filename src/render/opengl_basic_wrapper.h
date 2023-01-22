@@ -10,7 +10,7 @@
 #include "../utils/filesystem_basic.h"
 #include "stb_image.h"
 
-
+// I should rename this header to something more simple
 
 // Initialization
 void opengl_context_init();
