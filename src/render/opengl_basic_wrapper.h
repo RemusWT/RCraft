@@ -15,7 +15,9 @@
 // Initialization
 void opengl_context_init();
 void glad_init();
-void opengl_check_error(const char* error_at);
+void gl_check_error(const char* function, const char *file, int line);
+#define GL_CHECK_ERROR gl_check_error(__FUNCTION__, __FILE__, __LINE__);
+
 void window_validate(GLFWwindow *window);
 
 // BUFFERS

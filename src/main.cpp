@@ -5,11 +5,13 @@
 #include "render/render_internals.h"
 #include "camera.h"
 #include "clock.h"
-#include "font_rendering/freetype_wrapper.h"
+#include "font_rendering/font_rendering.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
 // Release mode compiles ok but there are problems. Nothing renderings. The shaders don't compile.
+
+// @TODO Write documentation for our modules.
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -30,7 +32,14 @@ int main() {
     GameInfo GInfo;
     GInfo.load_config();
 
+    std::string loaded_vertex_source        = file_get_contents("../../asset/shaders/vertex.glsl");
+    std::string loaded_fragment_source      = file_get_contents("../../asset/shaders/frag.glsl");
+    std::string loaded_text_vertex_source   = file_get_contents("../../asset/shaders/text_vert.glsl");
+    std::string loaded_text_fragment_source = file_get_contents("../../asset/shaders/text_frag.glsl");
 
+    Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
+    defaultShader.use();
+    Shader textShader(loaded_text_vertex_source.c_str(), loaded_text_fragment_source.c_str());
     
     // Font rendering experimenting
     FT_Library ft;
@@ -42,27 +51,24 @@ int main() {
     ft_load_ttf(ft, "../../asset/fonts/alagard.ttf", &face);
     ft_face_set_pixelsize(face, 0, 48);
 
-    std::map<char, CharacterGlyph> CharacterGlyphs;
+    std::map<char, Glyph> Glyphs;
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Read more about this!!
     for (unsigned char c = 0; c < 128; c++) {
         if (ft_face_load_character(face, c)) {
             continue;
         }
-        CharacterGlyphs.insert(std::pair<char, CharacterGlyph>(c, ft_face_generate_character_glyph(face)));
+        Glyphs.insert(std::pair<char, Glyph>(c, ft_face_create_glyph(face)));
     }
     ft_free_face(face);
     ft_free_freetype(ft);
 
+    Text my_text; GL_CHECK_ERROR
+    my_text.x = 200;
+    my_text.y = 200;
 
 
-
-    std::string loaded_vertex_source = file_get_contents("../../asset/shaders/vertex.glsl");
-    std::string loaded_fragment_source = file_get_contents("../../asset/shaders/frag.glsl");
-    Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
-    defaultShader.use();
-    opengl_check_error("Before cube model vertices");
-        
+ 
     std::vector<float> vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -111,7 +117,7 @@ int main() {
     
     VAO_.attribute(0, 3, GL_FLOAT, 5, 0);
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
-    opengl_check_error("Before cube_texture");
+
     Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
 
     Camera PlayerCamera(&GInfo);
@@ -121,7 +127,6 @@ int main() {
     
     proj_matrix = glm::perspective(glm::radians(70.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
     
-    opengl_check_error("Before defaultShader.setuniform");
     defaultShader.set4MatUniform("model_matrix", model_matrix);
     defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
     defaultShader.set4MatUniform("proj_matrix",  proj_matrix);
@@ -132,9 +137,10 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     Clock GameClock;
     GInfo.hide_cursor();
+    my_text.replace_text("Hello, Sailor!");
 
     // glfwSetCursorPosCallback(GInfo.window, cursor_callback);
-    
+
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,12 +148,16 @@ int main() {
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
         }
-        
-        PlayerCamera.freelook(defaultShader);
-        PlayerCamera.process_input(GameClock.deltatime);
-        
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        opengl_check_error("While loop");
+        defaultShader.use();
+        PlayerCamera.freelook(defaultShader); GL_CHECK_ERROR
+        PlayerCamera.process_input(GameClock.deltatime); GL_CHECK_ERROR
+
+        VAO_.bind();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
+        glDrawArrays(GL_TRIANGLES, 0, 36); GL_CHECK_ERROR
+        textShader.use(); GL_CHECK_ERROR
+        my_text.render_text(textShader, Glyphs, 1, glm::vec3(1.0f, 1.0f, 1.0f));
         
         
         glfwSwapBuffers(GInfo.window);

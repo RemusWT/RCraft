@@ -19,10 +19,9 @@ void window_validate(GLFWwindow *window) {
     }
 }
 
-void opengl_check_error(const char* error_at) {
+void gl_check_error(const char* function, const char *file, int line) {
     GLenum error = glGetError();
     if (error == GL_NO_ERROR) return;
-    printf("GL Error at location: %s\n", error_at);
     switch (error) {
     case GL_INVALID_ENUM:
         printf("GL_INVALID_ENUM detected! Enumeration parameter is not legal.\n");
@@ -46,6 +45,7 @@ void opengl_check_error(const char* error_at) {
         printf("GL_INVALID_FRAMEBUFFER_OPERATION detected! A reading or a writing operation occured to a framebuffer that is not complete.\n");
         break;
     }
+    printf("Error was encountered at function '%s' (%s:%d)\n", function, file, line);
 }
 
 

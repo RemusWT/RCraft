@@ -19,7 +19,7 @@ typedef struct Camera {
     bool moving_fast = false;
     float movespeed = 0.5f;
     Vector3 velocity;
-    void freelook(Shader current_shader);
+    void freelook(Shader &current_shader);
     void process_input(double deltatime);
     
     Vector2 mouse_position;
