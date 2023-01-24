@@ -5,7 +5,7 @@
 #include "render/render_internals.h"
 #include "camera.h"
 #include "clock.h"
-#include "font_rendering/font_render_internal.h"
+#include "font_rendering/freetype_wrapper.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
@@ -29,6 +29,9 @@ int main() {
     
     GameInfo GInfo;
     GInfo.load_config();
+
+
+    
     // Font rendering experimenting
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
@@ -36,21 +39,20 @@ int main() {
         return -1;
     }
     FT_Face face;
-    load_font(ft, "../../asset/fonts/alagard.ttf", &face);
-    set_font_pixelsize(face, 0, 48);
-    load_font_character(face, 'R');
+    ft_load_ttf(ft, "../../asset/fonts/alagard.ttf", &face);
+    ft_face_set_pixelsize(face, 0, 48);
 
-    std::map<char, Character> Characters;
+    std::map<char, CharacterGlyph> CharacterGlyphs;
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Read more about this!!
     for (unsigned char c = 0; c < 128; c++) {
-        if (load_font_character(face, c)) {
+        if (ft_face_load_character(face, c)) {
             continue;
         }
-        Characters.insert(std::pair<char, Character>(c, font_generate_character_texture(face)));
-        
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
+        CharacterGlyphs.insert(std::pair<char, CharacterGlyph>(c, ft_face_generate_character_glyph(face)));
+    }
+    ft_free_face(face);
+    ft_free_freetype(ft);
 
 
 
