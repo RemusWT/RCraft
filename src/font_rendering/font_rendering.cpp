@@ -1,11 +1,17 @@
 #include "font_rendering.h"
 
-Text::Text() {
-    glGenVertexArrays(1, &text_vao);
-    glGenBuffers(1, &text_vbo);
 
-    glBindVertexArray(text_vao);
-    glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
+Font::Font(const char *font_filepath, Shader *shader) {
+    ft_freetype_init(&freetype);GL_CHECK_ERROR
+    ft_load_ttf(font_filepath, freetype, &face);GL_CHECK_ERROR
+    currently_bound_shader = shader;GL_CHECK_ERROR
+    ft_face_set_size(face, 0, 12); GL_CHECK_ERROR// We might want to remove this
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0);
@@ -14,80 +20,33 @@ Text::Text() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
-void Text::replace_text(const char *text) {
-    literal_text = text;
-}
-
-void Text::render_text(Shader &shader, std::map<char, Glyph> Glyphs, glm::vec3 color) {
-    // activate corresponding render state	
-    shader.use();
-    glUniform3f(glGetUniformLocation(shader.ID, "textColor"), color.x, color.y, color.z);
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(text_vao); // will have to changed to just text_vao
-
-    // iterate through all characters
-    std::string::const_iterator c;
-    float advance_x = x;
-    for (c = literal_text.begin(); c != literal_text.end(); c++) 
-    {
-        Glyph ch = Glyphs[*c];
-
-        float xpos = advance_x + ch.Bearing.x * scale;
-        float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
-
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
-        // update VBO for each character
-        float vertices[6][4] = {
-            { xpos,     ypos + h,   0.0f, 0.0f },            
-            { xpos,     ypos,       0.0f, 1.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-
-            { xpos,     ypos + h,   0.0f, 0.0f },
-            { xpos + w, ypos,       1.0f, 1.0f },
-            { xpos + w, ypos + h,   1.0f, 0.0f }           
-        };
-        // render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-        // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, text_vbo);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        advance_x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-    }
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-
-
-Font::Font(const char *font_filepath, Shader *shader) {
-    ft_freetype_init(&freetype);
-    ft_load_ttf(font_filepath, freetype, &face);
-    currently_bound_shader = shader;
-    ft_face_set_size(face, 0, 12); // We might want to remove this
-}
 void Font::generate_ascii_glyphs() {
     for (u8 c = 0; c < 128; c++) {
         if (ft_face_load_character(face, c)) continue;
         Glyph c_glyph = ft_face_create_glyph(face);
-        Glyphs.insert(std::pair<char, Glyph>(c, c_glyph));
+        Glyphs[c] = c_glyph;
     }
 }
 
-void Font::change_size(float size) {
-    ft_face_set_size(face, 0, size);
+void Font::set_size(float fsize) {
+    if (size != fsize) {
+        ft_face_set_size(face, 0, fsize);
+        size = fsize;
+    }
+    
+
 }
-void Font::render_text(std::string text, glm::vec2 position, float scale, glm::vec3 color) {
-    // activate corresponding render state	
-    currently_bound_shader->use();
-    glUniform3f(glGetUniformLocation(currently_bound_shader->ID, "textColor"), color.r, color.g, color.b);
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(vao); // will have to changed to just text_vao
+void Font::render_text(std::string text, glm::vec2 position, float fsize, glm::vec3 color) {
+    // activate corresponding render state
+    if (size != fsize) {
+        set_size(fsize);
+        generate_ascii_glyphs();
+        printf("This happens\n");
+    }
+    currently_bound_shader->use();GL_CHECK_ERROR
+    glUniform3f(glGetUniformLocation(currently_bound_shader->ID, "textColor"), color.r, color.g, color.b);GL_CHECK_ERROR
+    glActiveTexture(GL_TEXTURE0);GL_CHECK_ERROR
+    glBindVertexArray(vao); 
 
     // iterate through all characters
     std::string::const_iterator c;
@@ -96,11 +55,11 @@ void Font::render_text(std::string text, glm::vec2 position, float scale, glm::v
     for (c = text.begin(); c != text.end(); c++) {
         Glyph ch = Glyphs[*c];
 
-        float xpos = advance_x + ch.Bearing.x * scale;
-        float ypos = position.y - (ch.Size.y - ch.Bearing.y) * scale;
+        float xpos = advance_x + ch.Bearing.x ;
+        float ypos = position.y - (ch.Size.y - ch.Bearing.y) ;
 
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
+        float w = ch.Size.x ;
+        float h = ch.Size.y ;
         // update VBO for each character
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },            
@@ -112,18 +71,18 @@ void Font::render_text(std::string text, glm::vec2 position, float scale, glm::v
             { xpos + w, ypos + h,   1.0f, 0.0f }           
         };
         // render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+        glBindTexture(GL_TEXTURE_2D, ch.TextureID);GL_CHECK_ERROR
         // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);GL_CHECK_ERROR
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        advance_x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+        advance_x += (ch.Advance >> 6) ; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
     glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);GL_CHECK_ERROR
 }
 

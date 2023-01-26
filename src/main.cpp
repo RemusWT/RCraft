@@ -46,40 +46,20 @@ int main() {
     std::string loaded_text_fragment_source = file_get_contents("../../asset/shaders/text_frag.glsl");
 
     Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
-    defaultShader.use();
+
+
     Shader textShader(loaded_text_vertex_source.c_str(), loaded_text_fragment_source.c_str());
+
     textShader.use();
     glm::mat4 text_proj = glm::ortho(0.0f, static_cast<float>(GInfo.resolution_x), 0.0f, static_cast<float>(GInfo.resolution_y));
     glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
     
     // Font rendering experimenting
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft)) {
-        printf("Freetype error: Could not init FreeType Library.\n");
-        return -1;
-    }
-    FT_Face face;
-    ft_load_ttf("../../asset/fonts/alagard.ttf", ft, &face);
+    Font Alagard("../../asset/fonts/alagard.ttf", &textShader);
+    Alagard.set_size(24.0f);
+    Alagard.generate_ascii_glyphs();
 
-    ft_face_set_size(face, 0, 24);
-    
-
-    for (u8 c = 0; c < 128; c++) {
-        if (ft_face_load_character(face, c)) continue;
-        Glyph c_glyph = ft_face_create_glyph(face);
-        Glyphs.insert(std::pair<char, Glyph>(c, c_glyph));
-    }
-
-    ft_free_face(face);
-    ft_free_freetype(ft);
-
-
-    Text sample_text;
-    sample_text.x = 20.0f;
-    sample_text.y = 20.0f;
-
-
-
+    defaultShader.use();
     std::vector<float> vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -161,17 +141,17 @@ int main() {
             break;
         }
         defaultShader.use();
-        PlayerCamera.freelook(defaultShader); GL_CHECK_ERROR
-        PlayerCamera.process_input(GameClock.deltatime); GL_CHECK_ERROR
+        PlayerCamera.freelook(defaultShader);
+        PlayerCamera.process_input(GameClock.deltatime); 
 
         // VAO_.bind();
         // glActiveTexture(GL_TEXTURE0);
         // glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
-        // glDrawArrays(GL_TRIANGLES, 0, 36); GL_CHECK_ERROR
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
         
-        sample_text.render_text(textShader, Glyphs, glm::vec3(0.5, 0.8f, 0.2f));
-        
-        glfwSwapBuffers(GInfo.window);
+        Alagard.render_text("Hello, Sailor!", glm::vec2(20.0f, 20.0f), 48.0f, glm::vec3(0.2f, 0.4f, 0.2f));
+
+        glfwSwapBuffers(GInfo.window); GL_CHECK_ERROR
         glfwPollEvents();
         GameClock.update();
     }
