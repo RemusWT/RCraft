@@ -30,7 +30,7 @@ void Font::generate_ascii_glyphs() {
 
 void Font::set_size(float fsize) {
     if (size != fsize) {
-        ft_face_set_size(face, 0, fsize);
+        FT_Set_Pixel_Sizes(face, 0, fsize);
         size = fsize;
     }
     
@@ -38,10 +38,12 @@ void Font::set_size(float fsize) {
 }
 void Font::render_text(std::string text, glm::vec2 position, float fsize, glm::vec3 color) {
     // activate corresponding render state
+
     if (size != fsize) {
-        set_size(fsize);
+        FT_Set_Pixel_Sizes(face, 0, fsize);
+        size = fsize;
         generate_ascii_glyphs();
-        printf("This happens\n");
+        printf("got called\n");
     }
     currently_bound_shader->use();GL_CHECK_ERROR
     glUniform3f(glGetUniformLocation(currently_bound_shader->ID, "textColor"), color.r, color.g, color.b);GL_CHECK_ERROR

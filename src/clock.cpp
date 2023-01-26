@@ -5,3 +5,6 @@ void Clock::update() {
     deltatime = current_time - last_time;
     last_time = current_time;
 }
+double Clock::get_current_time() {
+    return glfwGetTime();
+}

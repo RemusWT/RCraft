@@ -19,7 +19,7 @@ bool ft_load_ttf(const char* font_location, FT_Library ft_handler, FT_Face *face
     return false;
 }
 
-void ft_face_set_size(FT_Face face, int width, int height) {
+void ft_face_set_size(FT_Face face, int width, int height) { //@Deprecated
     FT_Set_Pixel_Sizes(face, width, height);
 }
 
@@ -47,8 +47,8 @@ Glyph ft_face_create_glyph(FT_Face &face) {
         face->glyph->bitmap.buffer
     );
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 

@@ -55,9 +55,13 @@ int main() {
     glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
     
     // Font rendering experimenting
-    Font Alagard("../../asset/fonts/alagard.ttf", &textShader);
-    Alagard.set_size(24.0f);
-    Alagard.generate_ascii_glyphs();
+    Font Alagard_38("../../asset/fonts/alagard.ttf", &textShader);
+    Alagard_38.set_size(38.0f);
+    Alagard_38.generate_ascii_glyphs();
+
+    Font Alagard_48("../../asset/fonts/alagard.ttf", &textShader);
+    Alagard_48.set_size(48.0f);
+    Alagard_48.generate_ascii_glyphs();
 
     defaultShader.use();
     std::vector<float> vertices = {
@@ -129,13 +133,18 @@ int main() {
     
     Clock GameClock;
     GInfo.hide_cursor();
+    GInfo.set_vsync(true);
 
 
     // glfwSetCursorPosCallback(GInfo.window, cursor_callback);
+    int fps = 0;
+    int new_fps = 0;
+    double start_of_counter = GameClock.get_current_time();
 
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
@@ -149,11 +158,24 @@ int main() {
         // glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
         // glDrawArrays(GL_TRIANGLES, 0, 36);
         
-        Alagard.render_text("Hello, Sailor!", glm::vec2(20.0f, 20.0f), 48.0f, glm::vec3(0.2f, 0.4f, 0.2f));
+        if ((GameClock.get_current_time() - start_of_counter) < 1.0f) {
+            new_fps += 1;
+        }
+        else {
+            fps = new_fps;
+            new_fps = 0;
+            start_of_counter = GameClock.get_current_time();
+        }
+        // @Bug rendering multiple times is fine as long as we don't change the pixel size each time. Otherwise it's not the problem that performance is reduced
+        // it actually decreases each time we resize the font.
+        Alagard_38.render_text("FPS: " + std::to_string(fps), glm::vec2(20.0f, 500.0f), 38.0f, glm::vec3(0.2f, 0.4f, 0.2f));
 
-        glfwSwapBuffers(GInfo.window); GL_CHECK_ERROR
+        Alagard_48.render_text("Hello, Sailor!", glm::vec2(20.0f, 20.0f), 48.0f, glm::vec3(0.2f, 0.4f, 0.2f));
+
+
         glfwPollEvents();
         GameClock.update();
+        glfwSwapBuffers(GInfo.window); GL_CHECK_ERROR
     }
 
     

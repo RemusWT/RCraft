@@ -9,6 +9,7 @@ typedef struct Clock {
     double last_time = 0.0f;
     double deltatime = 0.0f;
     void update();
+    double get_current_time(); // returns in seconds
 } Clock;
 
 #endif
