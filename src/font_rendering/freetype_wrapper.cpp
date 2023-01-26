@@ -13,6 +13,7 @@ bool ft_load_ttf(FT_Library ft_handler, const char* font_location, FT_Face *face
 void ft_face_set_pixelsize(FT_Face face, int width, int height) {
     FT_Set_Pixel_Sizes(face, width, height);
 }
+
 bool ft_face_load_character(FT_Face face, char character) {
     if (FT_Load_Char(face, character, FT_LOAD_RENDER)) {
         printf("Freetype error: Failed to load '%c' Glyph!\n", character);
@@ -21,7 +22,7 @@ bool ft_face_load_character(FT_Face face, char character) {
     return false;
 }
 
-Glyph ft_face_create_glyph(FT_Face face) {
+Glyph ft_face_create_glyph(FT_Face &face) {
     u32 texture_id;
     glGenTextures(1, &texture_id);
     glBindTexture(GL_TEXTURE_2D, texture_id);

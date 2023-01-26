@@ -3,11 +3,14 @@
 Text::Text() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
+
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
@@ -17,7 +20,9 @@ void Text::replace_text(const char *text) {
 
 void Text::render_text(Shader &text_shader, std::map<char, Glyph> &Glyphs, float scale, glm::vec3 color) {
     text_shader.use();
-    glUniform3f(glGetUniformLocation(text_shader.ID, "textColor"), color.x, color.y, color.z); GL_CHECK_ERROR
+    glUniform3f(glGetUniformLocation(text_shader.ID, "textColor"), color.r, color.g, color.b); GL_CHECK_ERROR
+    glUniformMatrix4fv(glGetUniformLocation(text_shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj)); GL_CHECK_ERROR
+    
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -44,7 +49,7 @@ void Text::render_text(Shader &text_shader, std::map<char, Glyph> &Glyphs, float
         glBufferSubData(GL_ARRAY_BUFFER, 0 , sizeof(vertices), vertices); GL_CHECK_ERROR
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         
-        glUniformMatrix4fv(glGetUniformLocation(text_shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj)); GL_CHECK_ERROR
+        
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
 

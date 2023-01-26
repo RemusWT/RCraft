@@ -18,7 +18,7 @@ typedef struct Glyph { // We need line gap info!!
 bool  ft_load_ttf(FT_Library ft_handler, const char* font_location, FT_Face *face_handler);
 void  ft_face_set_pixelsize(FT_Face face, int width, int height);
 bool  ft_face_load_character(FT_Face face, char character);
-Glyph ft_face_create_glyph(FT_Face face);
+Glyph ft_face_create_glyph(FT_Face &face);
 
 void  ft_free_face(FT_Face face);
 void  ft_free_freetype(FT_Library ft_handler);
