@@ -10,7 +10,7 @@ bool ft_load_ttf(FT_Library ft_handler, const char* font_location, FT_Face *face
     return false;
 }
 
-void ft_face_set_pixelsize(FT_Face face, int width, int height) {
+void ft_face_set_size(FT_Face face, int width, int height) {
     FT_Set_Pixel_Sizes(face, width, height);
 }
 
@@ -50,6 +50,7 @@ Glyph ft_face_create_glyph(FT_Face &face) {
         static_cast<u32>(face->glyph->advance.x)
     };
     return character;
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ft_free_face(FT_Face face) {

@@ -8,12 +8,14 @@
 // but we will have to use another method for better performance
 typedef struct Text {
     float x, y;
+    float scale = 1;
     std::string literal_text = "You should have changed me.";
-    u32 VAO, VBO; // @Reformat Use our defined structs for VAO and VBO!
-    glm::mat4 text_proj = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f); // to be changed relative to screen resolution
+
+    u32 text_vao, text_vbo; // @Reformat Use our defined structs for VAO and VBO!
+
     Text();
     void replace_text(const char *text);
-    void render_text(Shader &s, std::map<char, Glyph> &Glyphs, float scale, glm::vec3 color);
+    void render_text(Shader &shader, std::map<char, Glyph> Glyphs, glm::vec3 color);
 } Text;
 
 
