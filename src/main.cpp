@@ -35,6 +35,11 @@ int main() {
     GameInfo GInfo;
     GInfo.load_config();
 
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     std::string loaded_vertex_source        = file_get_contents("../../asset/shaders/vertex.glsl");
     std::string loaded_fragment_source      = file_get_contents("../../asset/shaders/frag.glsl");
     std::string loaded_text_vertex_source   = file_get_contents("../../asset/shaders/text_vert.glsl");
@@ -54,10 +59,10 @@ int main() {
         return -1;
     }
     FT_Face face;
-    ft_load_ttf(ft, "../../asset/fonts/alagard.ttf", &face);
+    ft_load_ttf("../../asset/fonts/alagard.ttf", ft, &face);
 
     ft_face_set_size(face, 0, 24);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    
 
     for (u8 c = 0; c < 128; c++) {
         if (ft_face_load_character(face, c)) continue;
@@ -141,14 +146,10 @@ int main() {
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
     glfwSetKeyCallback(GInfo.window, key_callback);
 
-    glEnable(GL_DEPTH_TEST);
+    
     Clock GameClock;
     GInfo.hide_cursor();
 
-
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // glfwSetCursorPosCallback(GInfo.window, cursor_callback);
 

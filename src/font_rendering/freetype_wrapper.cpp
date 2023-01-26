@@ -1,10 +1,19 @@
 #include "freetype_wrapper.h"
 
 // bool-returning functions return true if there was an error.
+bool  ft_freetype_init(FT_Library *ft) {
+    if (FT_Init_FreeType(ft)) {
+        printf("Freetype error: Could not initialize FreeType Library.\n");
+        return true;
+    }
+    return false;
+}
 
-bool ft_load_ttf(FT_Library ft_handler, const char* font_location, FT_Face *face_handler) {
+
+
+bool ft_load_ttf(const char* font_location, FT_Library ft_handler, FT_Face *face_handler) {
     if (FT_New_Face(ft_handler, font_location, 0, face_handler)) {
-        printf("Freetype error: Failed to load Glyph!\n");
+        printf("Freetype error: Failed to load font %s!\n", font_location);
         return true;
     }
     return false;

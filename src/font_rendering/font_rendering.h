@@ -18,6 +18,22 @@ typedef struct Text {
     void render_text(Shader &shader, std::map<char, Glyph> Glyphs, glm::vec3 color);
 } Text;
 
+typedef struct Font {
+    FT_Library freetype;
+    FT_Face face;
+    Shader *currently_bound_shader;
+
+    std::map<char, Glyph> Glyphs;
+    u32 vao, vbo;
+
+    float size;
+    Font(const char *font_filepath, Shader *shader);
+    void generate_ascii_glyphs();
+    void change_size(float size);
+    void render_text(std::string text, glm::vec2 position, float size, glm::vec3 color);
+
+} Font;
+
 
 
 #endif
