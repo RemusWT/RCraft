@@ -9,7 +9,7 @@
 
 
 typedef struct Glyph { // We need line gap info!!
-    u32 TextureID;
+    glm::vec2 tex_pos;
     glm::ivec2 Size;
     glm::ivec2 Bearing;
     u32 Advance;

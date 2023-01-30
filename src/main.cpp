@@ -23,7 +23,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 // }
 
 
-std::map<char, Glyph> Glyphs;
 
 
 int main() {
@@ -55,13 +54,8 @@ int main() {
     glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
     
     // Font rendering experimenting
-    Font Alagard_38("../../asset/fonts/alagard.ttf", &textShader);
-    Alagard_38.set_size(38.0f);
-    Alagard_38.generate_ascii_glyphs();
-
-    Font Alagard_48("../../asset/fonts/alagard.ttf", &textShader);
-    Alagard_48.set_size(48.0f);
-    Alagard_48.generate_ascii_glyphs();
+    Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
+    Alagard.generate_ascii(); GL_CHECK_ERROR
 
     defaultShader.use();
     std::vector<float> vertices = {
@@ -157,6 +151,8 @@ int main() {
         // glActiveTexture(GL_TEXTURE0);
         // glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
         // glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), glm::vec3(0.2f, 0.2f, 0.8f));
         
         if ((GameClock.get_current_time() - start_of_counter) < 1.0f) {
             new_fps += 1;
@@ -168,9 +164,6 @@ int main() {
         }
         // @Bug rendering multiple times is fine as long as we don't change the pixel size each time. Otherwise it's not the problem that performance is reduced
         // it actually decreases each time we resize the font.
-        Alagard_38.render_text("FPS: " + std::to_string(fps), glm::vec2(20.0f, 500.0f), 38.0f, glm::vec3(0.2f, 0.4f, 0.2f));
-
-        Alagard_48.render_text("Hello, Sailor!", glm::vec2(20.0f, 20.0f), 48.0f, glm::vec3(0.2f, 0.4f, 0.2f));
 
 
         glfwPollEvents();
