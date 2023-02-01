@@ -55,7 +55,6 @@ int main() {
     
     // Font rendering experimenting
     Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
-    Alagard.generate_ascii(); GL_CHECK_ERROR
 
     defaultShader.use();
     std::vector<float> vertices = {
@@ -152,7 +151,8 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), glm::vec3(0.2f, 0.2f, 0.8f));
+        Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), 38, glm::vec3(0.2f, 0.2f, 0.8f));
+
         
         if ((GameClock.get_current_time() - start_of_counter) < 1.0f) {
             new_fps += 1;
