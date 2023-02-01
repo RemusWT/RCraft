@@ -59,3 +59,6 @@ void GameInfo::show_cursor() {
 }
 
 
+void DiagInfo::add_diagnose(std::string text) {
+    
+}

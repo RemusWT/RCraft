@@ -25,7 +25,18 @@ typedef struct GameInfo {
     
 } GameInfo;
 
+typedef struct DiagInfo {
+    std::map<std::string, std::string> Diagnoses;
+
+    void add_diagnose(std::string diag_key,);
+} DiagInfo;
+
+
+
+
 std::string gameinfo_get_fileconfig(); // Should change it to gameinfo_get_settings or smth
+
+
 
 
 #endif

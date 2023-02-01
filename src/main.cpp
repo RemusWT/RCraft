@@ -55,6 +55,7 @@ int main() {
     
     // Font rendering experimenting
     Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
+    Font Coolvetica("../../asset/fonts/coolvetica.otf", &textShader);
 
     defaultShader.use();
     std::vector<float> vertices = {
@@ -133,6 +134,10 @@ int main() {
     int fps = 0;
     int new_fps = 0;
     double start_of_counter = GameClock.get_current_time();
+    std::string display_resolution;
+    display_resolution = "Window resolution:" + std::to_string(GInfo.resolution_x) + "x" + std::to_string(GInfo.resolution_y);
+
+    
 
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -151,8 +156,9 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), 38, glm::vec3(0.2f, 0.2f, 0.8f));
-
+        Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), 32, glm::vec3(0.2f, 0.2f, 0.8f));
+        
+        Coolvetica.render_text(display_resolution.c_str(), glm::vec2(30, 500), 16, glm::vec3(255.0f, 255.0f, 255.0f));
         
         if ((GameClock.get_current_time() - start_of_counter) < 1.0f) {
             new_fps += 1;

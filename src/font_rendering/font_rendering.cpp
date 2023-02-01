@@ -64,11 +64,11 @@ Font::Font(const char *font_filepath, Shader *shader) {
 
 
 void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3 color) {
-    // @TODO Current implemenation is not very efficient. We send a single quad each time to the gpu when we should create a large vertex data
-    // and batch it together to the gpu. One vertex transfer and once draw call.
+    
 
     _currently_bound_shader->use();GL_CHECK_ERROR
     glUniform3f(glGetUniformLocation(_currently_bound_shader->ID, "textColor"), color.r, color.g, color.b);GL_CHECK_ERROR
+    //glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(), 0.0f, static_cast<float>(SCR_HEIGHT));
 
     if (_FACES.find(size) == _FACES.end()) {
         _TYPEFACE typeface;
@@ -137,6 +137,10 @@ void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3
     glBindVertexArray(_VAO);
     
 
+
+    // @TODO Current implemenation is not very efficient. We send a single quad each time to the gpu when we should create a large vertex data
+    // and batch it together to the gpu. One vertex transfer and once draw call. WE NEED BATCHING
+
     // iterate through all characters
     std::string::const_iterator c;
     float advance_x = position.x; // starting point relative to where the whole text is supposed to be placed.
@@ -177,7 +181,7 @@ void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        advance_x += ch.Advance ; 
+        advance_x += ch.Advance; 
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);GL_CHECK_ERROR
