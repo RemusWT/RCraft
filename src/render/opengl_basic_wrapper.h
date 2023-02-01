@@ -15,6 +15,11 @@
 // Initialization
 void opengl_context_init();
 void glad_init();
+
+// GL_CHECK_ERROR is a macro that can be easily placed at the ending of any line of code and retrieves
+// debugging information if there were any errors. Info consists of the function scope name that GL_CHECK_ERROR was called inside of
+// file name where it was called and the line number. It also generates OpenGL specific error messages about what type of error occurred.
+
 void gl_check_error(const char* function, const char *file, int line);
 #define GL_CHECK_ERROR gl_check_error(__FUNCTION__, __FILE__, __LINE__);
 
@@ -48,6 +53,8 @@ typedef struct EBO {
 } EBO;
 
 // SHADERS
+
+// @Deprecated typedefs
 typedef u32 VertexShaderID;
 typedef u32 FragmentShaderID;
 typedef u32 ProgramShaderID;

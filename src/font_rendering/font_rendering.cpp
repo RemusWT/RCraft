@@ -14,6 +14,7 @@ Font::Font(const char *font_filepath, Shader *shader) {
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
+    // Generating a Buffer with the size of a single quad.
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
@@ -27,7 +28,6 @@ Font::Font(const char *font_filepath, Shader *shader) {
 void Font::generate_ascii() {
 
     // determining the total size for all ascii glyphs to fit
-
     for (u8 c = 0; c < 128; c++) {
         if (ft_face_load_character(face, c)) continue;
 
@@ -36,12 +36,13 @@ void Font::generate_ascii() {
             texture_atlas_height = static_cast<s32>(face->glyph->bitmap.rows); // thus creating just a long texture atlas
         }
     }
+
     // allocating enough memory for the texture atlas
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_atlas);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, texture_atlas_width, texture_atlas_height, 0, GL_RED, GL_UNSIGNED_BYTE, 0);GL_CHECK_ERROR
 
-    // Creating glyphs containing where in the atlas the corresponding texture is and other info.
+    // Populating the new texture atlas with glyphs and also storing glyph objects in the map.
     int advance_x = 0;
     for (u8 c = 0; c < 128; c++) {
         if (ft_face_load_character(face, c)) continue;
@@ -82,8 +83,10 @@ void Font::generate_ascii() {
 
 
 
+
 void Font::render_text(std::string text, glm::vec2 position, glm::vec3 color) {
-    // activate corresponding render state
+    // @TODO Current implemenation is not very efficient. We send a single quad each time to the gpu when we should create a large vertex data
+    // and batch it together to the gpu. One vertex transfer and once draw call.
 
     currently_bound_shader->use();GL_CHECK_ERROR
     glUniform3f(glGetUniformLocation(currently_bound_shader->ID, "textColor"), color.r, color.g, color.b);GL_CHECK_ERROR
@@ -95,7 +98,7 @@ void Font::render_text(std::string text, glm::vec2 position, glm::vec3 color) {
 
     // iterate through all characters
     std::string::const_iterator c;
-    float advance_x = position.x;
+    float advance_x = position.x; // starting point relative to where the whole text is supposed to be placed.
 
     for (c = text.begin(); c != text.end(); c++) {
         Glyph ch = Glyphs[*c];
@@ -110,8 +113,6 @@ void Font::render_text(std::string text, glm::vec2 position, glm::vec3 color) {
 
         float texture_x = ch.tex_pos.x;
         float texture_y = ch.tex_pos.y;
-        
-
 
         // update VBO for each character
         // Texture Coordinates are divided by the width and height of the atlas so we can get normalized values.
@@ -128,7 +129,6 @@ void Font::render_text(std::string text, glm::vec2 position, glm::vec3 color) {
         // update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, vbo);GL_CHECK_ERROR
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
-
 
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);

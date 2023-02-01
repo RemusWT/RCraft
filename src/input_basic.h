@@ -12,6 +12,7 @@ typedef struct Key {
 
 // Singleton-use struct for catching key callbacks. You don't need to poll through each one of them.
 // You can access a key's information anytime in the program.
+// The key information is per-frame.
 typedef struct KeyInfo {
     std::map<int, Key> keys;
     bool is_key_pressed(int key);

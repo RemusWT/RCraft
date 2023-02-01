@@ -15,6 +15,9 @@ void Camera::process_input(double deltatime) {
     glm::vec3 direction = glm::vec3(0.0f);
 
     // Player movement relative to camera's orientation. I don't fully understand my own implementation, but it works.
+    // Current implementation allows the player to move on the y axis based on the direction it's currently looking.
+    // Future gameplay will not consist this. Freeflight will also NOT use this. Only exception might be for noclip mode
+    // but only if we actually will need a noclip mode for whatever reason.
 
     if (Input.is_key_pressed(GLFW_KEY_D)) {
         direction.x += 1;
@@ -50,6 +53,8 @@ void Camera::process_input(double deltatime) {
     }
 
     
+    // Camera rotation relative to mouse input.
+    // Current implementation is from learnopengl.com camera section.
     double mouse_current_x, mouse_current_y;
     glfwGetCursorPos(ginfo->window, &mouse_current_x, &mouse_current_y);
     if (first_mouse) {

@@ -147,10 +147,10 @@ int main() {
         PlayerCamera.freelook(defaultShader);
         PlayerCamera.process_input(GameClock.deltatime); 
 
-        // VAO_.bind();
-        // glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
-        // glDrawArrays(GL_TRIANGLES, 0, 36);
+        VAO_.bind();
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), glm::vec3(0.2f, 0.2f, 0.8f));
         
@@ -162,8 +162,6 @@ int main() {
             new_fps = 0;
             start_of_counter = GameClock.get_current_time();
         }
-        // @Bug rendering multiple times is fine as long as we don't change the pixel size each time. Otherwise it's not the problem that performance is reduced
-        // it actually decreases each time we resize the font.
 
 
         glfwPollEvents();

@@ -4,8 +4,8 @@
 #include "freetype_wrapper.h"
 
 
-// @Robustness For now we will follow the learnopengl tutorial, which means to update the vbo data for each glyph at a time
-// but we will have to use another method for better performance
+// This struct contains the basics for freetype to work, a texture atlas for glyphs,
+// A map containing glyph objects, accessed by their character as key.
 
 typedef struct Font {
     FT_Library freetype;

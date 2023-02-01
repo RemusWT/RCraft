@@ -6,10 +6,11 @@
 #include "gameinfo.h"
 
 typedef struct Camera {
-    GameInfo *ginfo; // Needs to be dereferenced everytime.
+    GameInfo *ginfo; // We keep a copy of GameInfo singleton so we can pull information within our member functions.
     Camera(GameInfo *gameinfo); // Mainly to initialize the ginfo variable
     void change_ginfo(GameInfo *gameinfo);
 
+    // Consider it private
     glm::mat4 view_matrix = glm::mat4(1.0f);
     
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -22,6 +23,7 @@ typedef struct Camera {
     void freelook(Shader &current_shader);
     void process_input(double deltatime);
     
+    // Consider it private. Variables for in-game camera movement relative to mouse input.
     Vector2 mouse_position;
     bool first_mouse = true;
     float yaw = -90.0f;

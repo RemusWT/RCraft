@@ -2,6 +2,7 @@
 
 #include "opengl_basic_wrapper.h"
 
+// Shader methods separated in a different file. Perhaps it should have been all inside opengl_basic_wrapper.cpp
 
 Shader::Shader(const char* vertexSource, const char* fragmentSource) {
     ID = glCreateProgram();
