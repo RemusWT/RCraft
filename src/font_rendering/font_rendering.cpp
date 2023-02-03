@@ -144,6 +144,8 @@ void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3
     // iterate through all characters
     std::string::const_iterator c;
     float advance_x = position.x; // starting point relative to where the whole text is supposed to be placed.
+    std::vector<float> batched_vectices;
+    batched_vectices.reserve(text.size() * 6 * 4);
 
     for (c = text.begin(); c != text.end(); c++) {
         Glyph ch = _FACES[size].Glyphs[*c];
@@ -173,16 +175,25 @@ void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3
             { xpos + w, ypos,       (texture_x + ch.Advance) / texture_atlas_width, texture_y / texture_atlas_height },
             { xpos + w, ypos + h,   (texture_x + ch.Advance) / texture_atlas_width, 0.0f }
         };
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 4; j++) {
+                batched_vectices.push_back(vertices[i][j]);
+            }
+        }
 
         // update content of VBO memory
-        glBindBuffer(GL_ARRAY_BUFFER, _VBO);GL_CHECK_ERROR
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
+        //glBindBuffer(GL_ARRAY_BUFFER, _VBO);GL_CHECK_ERROR
+        //glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); 
 
         // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         advance_x += ch.Advance; 
     }
+    glBindBuffer(GL_ARRAY_BUFFER, _VBO);
+    glBufferData(GL_ARRAY_BUFFER, batched_vectices.size() * sizeof(float), &batched_vectices[0], GL_DYNAMIC_DRAW);
+    glDrawArrays(GL_TRIANGLES, 0, text.size() * 6);
+
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);GL_CHECK_ERROR
 }
