@@ -131,8 +131,6 @@ int main() {
 
 
     // glfwSetCursorPosCallback(GInfo.window, cursor_callback);
-    std::string display_resolution;
-    display_resolution = "Window resolution:" + std::to_string(GInfo.resolution_x) + "x" + std::to_string(GInfo.resolution_y);
 
     
     FPSCounter FPS;
