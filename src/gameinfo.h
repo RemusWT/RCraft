@@ -25,13 +25,17 @@ typedef struct GameInfo {
     
 } GameInfo;
 
-typedef struct DiagInfo {
-    std::map<std::string, std::string> Diagnoses;
+typedef struct FPSCounter {
+    int fps     = 0;
+    int new_fps = 0;
+    double time_passed = 0;
 
-    void add_diagnose(std::string diag_key,);
-} DiagInfo;
+    double frametime = 0;
+    double start_of_frame   = 0;
 
 
+    void update();
+} FPSCounter;
 
 
 std::string gameinfo_get_fileconfig(); // Should change it to gameinfo_get_settings or smth

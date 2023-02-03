@@ -6,7 +6,7 @@
 #include "camera.h"
 #include "clock.h"
 #include "font_rendering/font_rendering.h"
-//#include "font_rendering/font_rendering.h"
+#include "utils/debug.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
@@ -127,18 +127,15 @@ int main() {
     
     Clock GameClock;
     GInfo.hide_cursor();
-    GInfo.set_vsync(true);
+    GInfo.set_vsync(false);
 
 
     // glfwSetCursorPosCallback(GInfo.window, cursor_callback);
-    int fps = 0;
-    int new_fps = 0;
-    double start_of_counter = GameClock.get_current_time();
     std::string display_resolution;
     display_resolution = "Window resolution:" + std::to_string(GInfo.resolution_x) + "x" + std::to_string(GInfo.resolution_y);
 
     
-
+    FPSCounter FPS;
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -156,18 +153,12 @@ int main() {
         glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        Alagard.render_text("Hello Sailor! The fps is: " + std::to_string(fps), glm::vec2(20.0f, 20.0f), 32, glm::vec3(0.2f, 0.2f, 0.8f));
+        Alagard.render_text("Hello Sailor!", glm::vec2(20.0f, 20.0f), 32, glm::vec3(0.2f, 0.2f, 0.8f));
         
-        Coolvetica.render_text(display_resolution.c_str(), glm::vec2(30, 500), 16, glm::vec3(255.0f, 255.0f, 255.0f));
-        
-        if ((GameClock.get_current_time() - start_of_counter) < 1.0f) {
-            new_fps += 1;
-        }
-        else {
-            fps = new_fps;
-            new_fps = 0;
-            start_of_counter = GameClock.get_current_time();
-        }
+        FPS.update();
+        show_debug_info(Coolvetica, GInfo, PlayerCamera, FPS);
+
+
 
 
         glfwPollEvents();

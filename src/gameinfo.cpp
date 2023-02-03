@@ -58,7 +58,16 @@ void GameInfo::show_cursor() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
+void FPSCounter::update() {
+    if ((glfwGetTime() - time_passed) < 1.0f) {
+        new_fps += 1;
+    }
+    else {
+        fps = new_fps;
+        new_fps = 0;
+        time_passed = glfwGetTime();
+    }
 
-void DiagInfo::add_diagnose(std::string text) {
-    
+    frametime = glfwGetTime() - start_of_frame;
+    start_of_frame = glfwGetTime();
 }
