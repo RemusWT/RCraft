@@ -45,17 +45,13 @@ int main() {
     std::string loaded_text_fragment_source = file_get_contents("../../asset/shaders/text_frag.glsl");
 
     Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
-
-
     Shader textShader(loaded_text_vertex_source.c_str(), loaded_text_fragment_source.c_str());
 
     textShader.use();
+    // These should be moved somewhere else entirely
     glm::mat4 text_proj = glm::ortho(0.0f, static_cast<float>(GInfo.resolution_x), 0.0f, static_cast<float>(GInfo.resolution_y));
     glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
     
-    // Font rendering experimenting
-    Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
-    Font Coolvetica("../../asset/fonts/coolvetica.otf", &textShader);
 
     defaultShader.use();
     std::vector<float> vertices = {
@@ -106,15 +102,13 @@ int main() {
     
     VAO_.attribute(0, 3, GL_FLOAT, 5, 0);
     VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
-
     Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
 
     Camera PlayerCamera(&GInfo);
     
     glm::mat4 model_matrix = glm::mat4(1.0f);
     glm::mat4 proj_matrix  = glm::mat4(1.0f);
-    
-    proj_matrix = glm::perspective(glm::radians(70.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
+    proj_matrix            = glm::perspective(glm::radians(70.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
     
     defaultShader.use();
     defaultShader.set4MatUniform("model_matrix", model_matrix);
@@ -124,15 +118,15 @@ int main() {
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
     glfwSetKeyCallback(GInfo.window, key_callback);
 
-    
-    Clock GameClock;
+
+    // Manually set to experiment.
     GInfo.hide_cursor();
     GInfo.set_vsync(false);
 
+    Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
+    Font Coolvetica("../../asset/fonts/coolvetica.otf", &textShader);
 
-    // glfwSetCursorPosCallback(GInfo.window, cursor_callback);
-
-    
+    Clock GameClock;
     FPSCounter FPS;
     while (!glfwWindowShouldClose(GInfo.window)) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

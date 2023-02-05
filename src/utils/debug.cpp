@@ -15,6 +15,6 @@ void show_debug_info(Font &font, GameInfo &ginfo, Camera &player, FPSCounter &fp
     std::string fps_info = "FPS: " + std::to_string(fps.fps);
     font.render_text(fps_info, glm::vec2(20, ginfo.resolution_y - line_gap * 3), 16, glm::vec3(1.0f, 1.0f, 1.0f));
 
-    std::string frametime_info = "Frametime: " + std::to_string(fps.frametime);
+    std::string frametime_info = "Frametime ms: " + std::to_string(fps.frametime * 1000);
     font.render_text(frametime_info, glm::vec2(20, ginfo.resolution_y - line_gap * 4), 16, glm::vec3(1.0f, 1.0f, 1.0f));
 }
