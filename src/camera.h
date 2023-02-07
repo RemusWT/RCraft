@@ -18,7 +18,7 @@ typedef struct Camera {
     glm::vec3 front    = glm::vec3(0.0f, 0.0f, -1.0f);
     
     bool moving_fast = false;
-    float movespeed = 0.5f;
+    float movespeed = 2.0f;
     Vector3 velocity;
     void freelook(Shader &current_shader);
     void process_input(double deltatime);

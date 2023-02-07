@@ -47,8 +47,8 @@ void Camera::process_input(double deltatime) {
     if (direction.y > 0) position.y += speed; // this looks odd bcs its an exception, we don't change the y value relative to the camera.
     else if (direction.y < 0) position.y -= speed;
     if (Input.is_key_pressed(GLFW_KEY_LEFT_ALT)) { // @Bug toggling movespeed sometimes doesn't work.
-        if (moving_fast) {movespeed = 0.5f; moving_fast = false;}
-        else {movespeed = 1.0f; moving_fast = true;}
+        if (moving_fast) {movespeed = 2.0f; moving_fast = false;}
+        else {movespeed = 4.0f; moving_fast = true;}
         printf("Moving fast: %i\n", moving_fast);
     }
 
