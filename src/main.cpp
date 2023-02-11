@@ -7,6 +7,7 @@
 #include "clock.h"
 #include "font_rendering/font_rendering.h"
 #include "utils/debug.h"
+#include "render/render_manager.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
@@ -122,6 +123,16 @@ int main() {
     // Manually set to experiment.
     GInfo.hide_cursor();
     GInfo.set_vsync(false);
+    glEnable(GL_CULL_FACE);
+
+
+    RenderManager RManager;
+    for (int i=0; i < 300; i++) {
+        for (int j=0; j < 300; j++) {
+            RManager.add_block_to_render(glm::vec3((float)(i), 0.0f, (float)(j)));
+        }
+    }
+    //RManager.add_block_to_render(glm::vec3(2.0f, 0.0f, 0.0f));
 
     Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
     Font Coolvetica("../../asset/fonts/coolvetica.otf", &textShader);
@@ -140,10 +151,11 @@ int main() {
         PlayerCamera.freelook(defaultShader);
         PlayerCamera.process_input(GameClock.deltatime); 
 
-        VAO_.bind();
+        //VAO_.bind();
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        RManager.render_blocks();
 
         Alagard.render_text("Hello Sailor!", glm::vec2(20.0f, 20.0f), 32, glm::vec3(0.2f, 0.2f, 0.8f));
         

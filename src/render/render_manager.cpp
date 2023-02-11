@@ -1,0 +1,101 @@
+#include "render_manager.h"
+
+RenderManager::RenderManager() {
+    cube_model_vertex_data = {
+            // Back face
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right 
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right    
+                         
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+                           
+            // Front face
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+                    
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+                    
+            // Left face
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left 
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+            
+            // Right face
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right      
+                      
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-lefta
+            0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+            
+            // Bottom face          
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+                    
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+            
+            // Top face
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+                            
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  // top-left
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f // bottom-left  
+                          
+    };
+    vertex_data.reserve(1000); // This number should be relative to render distance
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+    
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float), cube_model_vertex_data.data(), GL_DYNAMIC_DRAW); GL_CHECK_ERROR
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0 * sizeof(float))); GL_CHECK_ERROR
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));GL_CHECK_ERROR
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    
+    std::string loaded_vertex_source        = file_get_contents("../../asset/shaders/vertex.glsl");
+    std::string loaded_fragment_source      = file_get_contents("../../asset/shaders/frag.glsl");
+    CubeShader = new Shader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
+    
+
+}
+
+void RenderManager::add_block_to_render(glm::vec3 block_pos) {
+    std::vector<float> temp_vertex_data = cube_model_vertex_data;
+    for (int i=0; i < 180; i += 5) {
+        for (int j=0; j < 3; j++) {
+            switch (j) {
+                case 0:
+                temp_vertex_data[i+j] += block_pos.x;
+                case 1:
+                temp_vertex_data[i+j] += block_pos.y;
+                case 2:
+                temp_vertex_data[i+j] += block_pos.z;
+            }
+        }
+    }
+    vertex_data.insert(vertex_data.end(), temp_vertex_data.begin(), temp_vertex_data.end());
+}
+
+void RenderManager::render_blocks() {
+    glBindVertexArray(VAO);GL_CHECK_ERROR
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float), &vertex_data[0], GL_DYNAMIC_DRAW);GL_CHECK_ERROR
+    glDrawArrays(GL_TRIANGLES, 0, vertex_data.size());GL_CHECK_ERROR
+}
