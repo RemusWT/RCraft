@@ -5,6 +5,7 @@
 #include FT_FREETYPE_H
 #include "../utils/basic_types.h" 
 #include "../render/opengl_basic_wrapper.h"
+#include "../gameinfo.h"
 
 
 
@@ -56,10 +57,13 @@ typedef struct Font {
 } Font;
 
 typedef struct TextManager {
+    Shader *current_text_shader;
     Font *currently_bound_font;
+    glm::mat4 text_projection;
     glm::vec3 currently_set_color;
     std::map<std::string, Font> Fonts;
-    TextManager();
+    
+    TextManager(GameInfo &GInfo);
     void set_font(std::string font_name);
     void set_color(glm::vec3 color);
     void render(std::string text, glm::vec2 position, int size);

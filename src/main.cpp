@@ -34,16 +34,7 @@ int main() {
     
     GameInfo GInfo;
     GInfo.load_config();
-
-    std::string loaded_text_vertex_source   = file_get_contents("../../asset/shaders/text_vert.glsl");
-    std::string loaded_text_fragment_source = file_get_contents("../../asset/shaders/text_frag.glsl");
-    Shader textShader(loaded_text_vertex_source.c_str(), loaded_text_fragment_source.c_str());
-
-    textShader.use();
-    // These should be moved somewhere else entirely
-    glm::mat4 text_proj = glm::ortho(0.0f, static_cast<float>(GInfo.resolution_x), 0.0f, static_cast<float>(GInfo.resolution_y));
-    glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
-
+    
 
     // For now this is fine, but we should create a system of sorts for containing multiple textures, even if we will have a texture atlas.
     Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @TODO @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
@@ -67,9 +58,9 @@ int main() {
         }
     }
 
-
-    Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
-    Font Coolvetica("../../asset/fonts/coolvetica.otf", &textShader);
+    TextManager TextManager(GInfo);
+    TextManager.set_font("Coolvetica");
+    
 
     Clock GameClock;
     FPSCounter FPS;
@@ -85,19 +76,16 @@ int main() {
         PlayerCamera.freelook(*RManager.CubeShader);
         PlayerCamera.process_input(GameClock.deltatime); 
 
-        //VAO_.bind();
+
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
         RManager.render_blocks();
 
-        Alagard.render_text("Hello Sailor!", glm::vec2(20.0f, 20.0f), 32, glm::vec3(0.2f, 0.2f, 0.8f));
+        TextManager.render("Hello, there!", glm::vec2(20.0f, 20.0f), 24);
 
         
         FPS.update();
-        show_debug_info(Coolvetica, GInfo, PlayerCamera, FPS);
-
-
+        show_debug_info(TextManager, GInfo, PlayerCamera, FPS);
 
 
         glfwPollEvents();

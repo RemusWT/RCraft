@@ -198,3 +198,30 @@ void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3
     glBindTexture(GL_TEXTURE_2D, 0);GL_CHECK_ERROR
 }
 
+TextManager::TextManager(GameInfo &GInfo) {
+    std::string loaded_text_vertex_source   = file_get_contents("../../asset/shaders/text_vert.glsl");
+    std::string loaded_text_fragment_source = file_get_contents("../../asset/shaders/text_frag.glsl");
+    current_text_shader = new Shader(loaded_text_vertex_source.c_str(), loaded_text_fragment_source.c_str());
+    
+    current_text_shader->use();
+    glm::mat4 text_projection = glm::ortho(0.0f, static_cast<float>(GInfo.resolution_x), 0.0f, static_cast<float>(GInfo.resolution_y));
+    glUniformMatrix4fv(glGetUniformLocation(current_text_shader->ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_projection));
+    
+    currently_set_color = glm::vec3(255.0f, 255.0f, 255.0f);
+    Font Coolvetica("../../asset/fonts/coolvetica.otf", current_text_shader);
+
+    Fonts.insert(std::pair<std::string, Font>("Coolvetica", Coolvetica));
+}
+
+void TextManager::set_font(std::string font_name) {
+    if (Fonts.find(font_name) != Fonts.end()) {
+        currently_bound_font = &Fonts.at(font_name);
+    }
+    else {
+        printf("TextManager error: Font '%s' is not loaded", font_name.c_str());
+    }
+}
+
+void TextManager::render(std::string text, glm::vec2 position, int size) {
+    currently_bound_font->render_text(text, position, size, currently_set_color);
+}

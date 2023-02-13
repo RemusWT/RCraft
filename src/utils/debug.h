@@ -4,4 +4,4 @@
 
 
 
-void show_debug_info(Font &font, GameInfo &ginfo, Camera &player, FPSCounter &fps);
+void show_debug_info(TextManager &TextManager, GameInfo &ginfo, Camera &player, FPSCounter &fps);
