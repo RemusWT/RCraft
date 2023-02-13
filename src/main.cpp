@@ -52,6 +52,7 @@ int main() {
     // These should be moved somewhere else entirely
     glm::mat4 text_proj = glm::ortho(0.0f, static_cast<float>(GInfo.resolution_x), 0.0f, static_cast<float>(GInfo.resolution_y));
     glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
+
     
 
     defaultShader.use();
@@ -116,6 +117,7 @@ int main() {
     defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
     defaultShader.set4MatUniform("proj_matrix",  proj_matrix);
     
+
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
     glfwSetKeyCallback(GInfo.window, key_callback);
 
@@ -125,10 +127,9 @@ int main() {
     GInfo.set_vsync(false);
     glEnable(GL_CULL_FACE);
 
-
     RenderManager RManager;
-    for (int i=0; i < 300; i++) {
-        for (int j=0; j < 300; j++) {
+    for (int i = 0; i < 300; i++) {
+        for (int j = 0; j < 300; j++) {
             RManager.add_block_to_render(glm::vec3((float)(i), 0.0f, (float)(j)));
         }
     }
