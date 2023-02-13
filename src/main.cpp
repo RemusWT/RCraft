@@ -92,6 +92,7 @@ int main() {
         RManager.render_blocks();
 
         Alagard.render_text("Hello Sailor!", glm::vec2(20.0f, 20.0f), 32, glm::vec3(0.2f, 0.2f, 0.8f));
+
         
         FPS.update();
         show_debug_info(Coolvetica, GInfo, PlayerCamera, FPS);

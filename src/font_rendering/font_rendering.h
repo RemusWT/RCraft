@@ -40,7 +40,7 @@ typedef struct _TYPEFACE {
 
 // This struct contains the basics for freetype to work, a texture atlas for glyphs,
 // A map containing glyph objects, accessed by their character as key.
-
+// I also tried to use a different naming style for "private members" but I'm not a big fan of.
 typedef struct Font {
     FT_Library _freetype;
     FT_Face _face;
@@ -55,6 +55,15 @@ typedef struct Font {
 
 } Font;
 
+typedef struct TextManager {
+    Font *currently_bound_font;
+    glm::vec3 currently_set_color;
+    std::map<std::string, Font> Fonts;
+    TextManager();
+    void set_font(std::string font_name);
+    void set_color(glm::vec3 color);
+    void render(std::string text, glm::vec2 position, int size);
+} TextManager;
 
 
 #endif

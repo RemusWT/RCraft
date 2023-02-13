@@ -41,8 +41,8 @@ void Camera::process_input(double deltatime) {
     float length = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z;
     if (length != 0.0f) direction = glm::normalize(direction);
 
-    position   += direction.x * glm::normalize(glm::cross(front, up)) * speed;
-    position   += direction.z * front * speed;
+    position += direction.x * glm::normalize(glm::cross(front, up)) * speed;
+    position += direction.z * front * speed;
 
     if (direction.y > 0) position.y += speed; // this looks odd bcs its an exception, we don't change the y value relative to the camera.
     else if (direction.y < 0) position.y -= speed;
