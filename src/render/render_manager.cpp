@@ -1,6 +1,6 @@
 #include "render_manager.h"
 
-RenderManager::RenderManager() {
+RenderManager::RenderManager(GameInfo &GInfo) {
     cube_model_vertex_data = {
             // Back face
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
@@ -62,16 +62,20 @@ RenderManager::RenderManager() {
     
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float), cube_model_vertex_data.data(), GL_DYNAMIC_DRAW); GL_CHECK_ERROR
+    glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float), cube_model_vertex_data.data(), GL_DYNAMIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0 * sizeof(float))); GL_CHECK_ERROR
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));GL_CHECK_ERROR
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0 * sizeof(float))); 
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     
     std::string loaded_vertex_source        = file_get_contents("../../asset/shaders/vertex.glsl");
     std::string loaded_fragment_source      = file_get_contents("../../asset/shaders/frag.glsl");
     CubeShader = new Shader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
+
+    proj_matrix = glm::perspective(glm::radians(70.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
+    CubeShader->use();
+    CubeShader->set4MatUniform("proj_matrix", proj_matrix);
     
 
 }
@@ -94,7 +98,7 @@ void RenderManager::add_block_to_render(glm::vec3 block_pos) {
 }
 
 void RenderManager::render_blocks() {
-    glBindVertexArray(VAO);GL_CHECK_ERROR
+    glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float), &vertex_data[0], GL_DYNAMIC_DRAW);GL_CHECK_ERROR
     glDrawArrays(GL_TRIANGLES, 0, vertex_data.size());GL_CHECK_ERROR

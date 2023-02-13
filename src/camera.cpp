@@ -5,7 +5,7 @@ Camera::Camera(GameInfo *gameinfo) {
 }
 
 void Camera::freelook(Shader &current_shader) { // not to be confused with look_at. we only look what is in front of the camera.
-    current_shader.use();GL_CHECK_ERROR
+    current_shader.use();
     view_matrix = glm::lookAt(position, position + front, up);
     current_shader.set4MatUniform("view_matrix", view_matrix);
 }

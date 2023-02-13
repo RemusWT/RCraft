@@ -35,17 +35,8 @@ int main() {
     GameInfo GInfo;
     GInfo.load_config();
 
-    glEnable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    std::string loaded_vertex_source        = file_get_contents("../../asset/shaders/vertex.glsl");
-    std::string loaded_fragment_source      = file_get_contents("../../asset/shaders/frag.glsl");
     std::string loaded_text_vertex_source   = file_get_contents("../../asset/shaders/text_vert.glsl");
     std::string loaded_text_fragment_source = file_get_contents("../../asset/shaders/text_frag.glsl");
-
-    Shader defaultShader(loaded_vertex_source.c_str(), loaded_fragment_source.c_str());
     Shader textShader(loaded_text_vertex_source.c_str(), loaded_text_fragment_source.c_str());
 
     textShader.use();
@@ -53,69 +44,11 @@ int main() {
     glm::mat4 text_proj = glm::ortho(0.0f, static_cast<float>(GInfo.resolution_x), 0.0f, static_cast<float>(GInfo.resolution_y));
     glUniformMatrix4fv(glGetUniformLocation(textShader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_proj));
 
-    
 
-    defaultShader.use();
-    std::vector<float> vertices = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
-    VAO VAO_;
-    VBO VBO_(vertices.data(), vertices.size() * sizeof(float));
-    
-    VAO_.attribute(0, 3, GL_FLOAT, 5, 0);
-    VAO_.attribute(1, 2, GL_FLOAT, 5, 3);
-    Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
+    // For now this is fine, but we should create a system of sorts for containing multiple textures, even if we will have a texture atlas.
+    Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @TODO @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
 
     Camera PlayerCamera(&GInfo);
-    
-    glm::mat4 model_matrix = glm::mat4(1.0f);
-    glm::mat4 proj_matrix  = glm::mat4(1.0f);
-    proj_matrix            = glm::perspective(glm::radians(70.0f),((float)GInfo.resolution_x/(float)GInfo.resolution_y), 0.1f, 100.0f);
-    
-    defaultShader.use();
-    defaultShader.set4MatUniform("model_matrix", model_matrix);
-    defaultShader.set4MatUniform("view_matrix",  PlayerCamera.view_matrix);
-    defaultShader.set4MatUniform("proj_matrix",  proj_matrix);
     
 
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
@@ -125,15 +58,15 @@ int main() {
     // Manually set to experiment.
     GInfo.hide_cursor();
     GInfo.set_vsync(false);
-    glEnable(GL_CULL_FACE);
 
-    RenderManager RManager;
+
+    RenderManager RManager(GInfo);
     for (int i = 0; i < 300; i++) {
         for (int j = 0; j < 300; j++) {
             RManager.add_block_to_render(glm::vec3((float)(i), 0.0f, (float)(j)));
         }
     }
-    //RManager.add_block_to_render(glm::vec3(2.0f, 0.0f, 0.0f));
+
 
     Font Alagard("../../asset/fonts/alagard.ttf", &textShader); GL_CHECK_ERROR
     Font Coolvetica("../../asset/fonts/coolvetica.otf", &textShader);
@@ -148,8 +81,8 @@ int main() {
         if (Input.is_key_pressed(GLFW_KEY_ESCAPE)) { // should create a function for basic functionality.
             break;
         }
-        defaultShader.use();
-        PlayerCamera.freelook(defaultShader);
+
+        PlayerCamera.freelook(*RManager.CubeShader);
         PlayerCamera.process_input(GameClock.deltatime); 
 
         //VAO_.bind();

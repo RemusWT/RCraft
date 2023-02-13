@@ -49,6 +49,13 @@ GameInfo::GameInfo() {
     window = glfwCreateWindow(800, 600, "RCraft", NULL, NULL); // We resize the window in another function. @Refactor Maybe we should do it in this one too.
     glfwMakeContextCurrent(window);
     glad_init();
+
+    // Basic opengl functionality
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glEnable(GL_CULL_FACE);
 }
 
 void GameInfo::hide_cursor() {
