@@ -39,7 +39,7 @@ int main() {
     // For now this is fine, but we should create a system of sorts for containing multiple textures, even if we will have a texture atlas.
     Texture cube_texture("../../asset/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE); // @TODO @Robustness maybe we should have a find asset folder functin or something. Cause otherwise we will have to edit a lot of textures in the future
 
-    Camera PlayerCamera(&GInfo);
+    
     
 
     glfwSetFramebufferSizeCallback(GInfo.window, framebuffer_size_callback); // maybe move them somewhere else
@@ -52,14 +52,15 @@ int main() {
 
 
     RenderManager RManager(GInfo);
-    for (int i = 0; i < 300; i++) {
-        for (int j = 0; j < 300; j++) {
+    for (int i = 0; i < 122; i++) {
+        for (int j = 0; j < 122; j++) {
             RManager.add_block_to_render(glm::vec3((float)(i), 0.0f, (float)(j)));
         }
     }
 
     TextManager TextManager(GInfo);
     TextManager.set_font("Coolvetica");
+    Camera PlayerCamera(&GInfo, RManager.CubeShader);
     
 
     Clock GameClock;
@@ -73,13 +74,14 @@ int main() {
             break;
         }
 
-        PlayerCamera.freelook(*RManager.CubeShader);
-        PlayerCamera.process_input(GameClock.deltatime); 
+        PlayerCamera.freelook();
+        PlayerCamera.process_input(GameClock.deltatime);
 
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, cube_texture.ID);
         RManager.render_blocks();
+
 
         TextManager.render("Hello, there!", glm::vec2(20.0f, 20.0f), 24);
 

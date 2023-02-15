@@ -1,13 +1,14 @@
 #include "camera.h"
 
-Camera::Camera(GameInfo *gameinfo) {
+Camera::Camera(GameInfo *gameinfo, Shader *shader) {
     ginfo = gameinfo;
+    currently_used_shader = shader;
 }
 
-void Camera::freelook(Shader &current_shader) { // not to be confused with look_at. we only look what is in front of the camera.
-    current_shader.use();
+void Camera::freelook() { // not to be confused with look_at. we only look what is in front of the camera.
+    currently_used_shader->use();
     view_matrix = glm::lookAt(position, position + front, up);
-    current_shader.set4MatUniform("view_matrix", view_matrix);
+    currently_used_shader->set4MatUniform("view_matrix", view_matrix);
 }
 
 void Camera::process_input(double deltatime) {

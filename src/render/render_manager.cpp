@@ -103,3 +103,7 @@ void RenderManager::render_blocks() {
     glBufferData(GL_ARRAY_BUFFER, vertex_data.size() * sizeof(float), &vertex_data[0], GL_DYNAMIC_DRAW);GL_CHECK_ERROR
     glDrawArrays(GL_TRIANGLES, 0, vertex_data.size());GL_CHECK_ERROR
 }
+
+void RenderManager::clear_vertex_data() {
+    vertex_data.clear();
+}
