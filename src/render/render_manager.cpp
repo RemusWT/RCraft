@@ -87,10 +87,13 @@ void RenderManager::add_block_to_render(glm::vec3 block_pos) {
             switch (j) {
                 case 0:
                 temp_vertex_data[i+j] += block_pos.x;
+                break;
                 case 1:
                 temp_vertex_data[i+j] += block_pos.y;
+                break;
                 case 2:
                 temp_vertex_data[i+j] += block_pos.z;
+                break;
             }
         }
     }
