@@ -64,8 +64,13 @@ Font::Font(const char *font_filepath, Shader *shader) {
 
 
 void Font::render_text(std::string text, glm::vec2 position, int size, glm::vec3 color) {
-    
+    // @BUG Currently, the text can be invisible because of what I guess to be a Field of View problem.
+    // If you get close to a block the text in the corner of the screen will be faded as if it hides behind the block.
+    // I believe this is because the text on the screen is placed further in front of the camera and the blocks can
+    // be rendered closer to the screen.
 
+
+    
     _currently_bound_shader->use();GL_CHECK_ERROR
     glUniform3f(glGetUniformLocation(_currently_bound_shader->ID, "textColor"), color.r, color.g, color.b);GL_CHECK_ERROR
     //glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(), 0.0f, static_cast<float>(SCR_HEIGHT));
@@ -208,7 +213,7 @@ TextManager::TextManager(GameInfo &GInfo) {
     glUniformMatrix4fv(glGetUniformLocation(current_text_shader->ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_projection));
     
     currently_set_color = glm::vec3(255.0f, 255.0f, 255.0f);
-    Font Coolvetica("../../asset/fonts/coolvetica.otf", current_text_shader);
+     Coolvetica("../../asset/fonts/coolvetica.otf", current_text_shader);
 
     Fonts.insert(std::pair<std::string, Font>("Coolvetica", Coolvetica));
 }

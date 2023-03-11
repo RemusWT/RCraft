@@ -5,6 +5,11 @@
 #include "../gameinfo.h"
 
 
+
+// RenderManager is responsible for managing all renderable objects in the world.
+// currently, RM can be used by adding a single block to render.
+// @TODO To be implemented an option to add a whole chunk to render.
+
 typedef struct RenderManager {
     Shader *CubeShader;
     u32 VAO, VBO, EBO;
