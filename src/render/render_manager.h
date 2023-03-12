@@ -3,6 +3,7 @@
 #define render_manager_h
 #include "render_internals.h"
 #include "../gameinfo.h"
+#include "../chunk_manager.h"
 
 
 
@@ -27,6 +28,7 @@ typedef struct RenderManager {
     void add_block_to_render(glm::vec3 block_pos);
     void render_blocks();
     void clear_vertex_data();
+    void add_chunk_to_render(Chunk &chunk);
 
 
     void render_camera();

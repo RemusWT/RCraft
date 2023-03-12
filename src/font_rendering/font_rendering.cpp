@@ -213,7 +213,7 @@ TextManager::TextManager(GameInfo &GInfo) {
     glUniformMatrix4fv(glGetUniformLocation(current_text_shader->ID, "projection"), 1, GL_FALSE, glm::value_ptr(text_projection));
     
     currently_set_color = glm::vec3(255.0f, 255.0f, 255.0f);
-     Coolvetica("../../asset/fonts/coolvetica.otf", current_text_shader);
+    Font Coolvetica("../../asset/fonts/coolvetica.otf", current_text_shader);
 
     Fonts.insert(std::pair<std::string, Font>("Coolvetica", Coolvetica));
 }
