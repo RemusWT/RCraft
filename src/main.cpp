@@ -64,9 +64,14 @@ int main() {
     CManager.load_chunk(Test_Chunk);
 
     RenderManager RManager(GInfo);
-    for (int i = 0; i < 122; i++) {
-        for (int j = 0; j < 122; j++) {
-            RManager.add_block_to_render(glm::vec3((float)(i), 0.0f, (float)(j)));
+    for (int x = 0; x < 16; x++) {
+        for (int z = 0; z < 16; z++) {
+            for (int y = 0; y < 256; y++) {
+                Block blocky;
+                blocky.type = 1;
+                blocky.position = glm::vec3(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
+                Test_Chunk.add_block(blocky);                
+            }
         }
     }
     RManager.add_chunk_to_render(Test_Chunk);
