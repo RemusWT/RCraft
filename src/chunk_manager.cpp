@@ -1,10 +1,10 @@
 #include "chunk_manager.h"
 
 
-Chunk::add_block(Block &block) {
+void Chunk::add_block(Block &block) {
     Blocks.push_back(block);
 }
 
-ChunkManager::load_chunk(Chunk &chunk) {
-    loaded_chunk.push_back(chunk);
+void ChunkManager::load_chunk(Chunk &chunk) {
+    loaded_chunks.push_back(chunk);
 }

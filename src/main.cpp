@@ -8,7 +8,7 @@
 #include "font_rendering/font_rendering.h"
 #include "utils/debug.h"
 #include "render/render_manager.h"
-#incldue "chunk_manager.h"
+#include "chunk_manager.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
@@ -56,11 +56,12 @@ int main() {
     Test_Block.position = glm::vec3(0.0f, 1.0f, 0.0f);
     
     Chunk Test_Chunk;
+    Test_Chunk.position.x = 0;
+    Test_Chunk.position.y = 0;
     Test_Chunk.add_block(Test_Block);
     
     ChunkManager CManager;
     CManager.load_chunk(Test_Chunk);
-
 
     RenderManager RManager(GInfo);
     for (int i = 0; i < 122; i++) {
@@ -68,6 +69,7 @@ int main() {
             RManager.add_block_to_render(glm::vec3((float)(i), 0.0f, (float)(j)));
         }
     }
+    RManager.add_chunk_to_render(Test_Chunk);
 
     TextManager TextManager(GInfo);
     TextManager.set_font("Coolvetica");

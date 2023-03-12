@@ -100,6 +100,15 @@ void RenderManager::add_block_to_render(glm::vec3 block_pos) {
     vertex_data.insert(vertex_data.end(), temp_vertex_data.begin(), temp_vertex_data.end());
 }
 
+void RenderManager::add_chunk_to_render(Chunk &chunk)  {
+    for (int i=0; i < static_cast<int>(chunk.Blocks.size()); i++) {
+        glm::vec3 relative_to_chunk_pos = chunk.Blocks[i].position;
+        relative_to_chunk_pos.x += chunk.position.x;
+        relative_to_chunk_pos.z += chunk.position.y;
+        add_block_to_render(relative_to_chunk_pos); // technically this should be called correctly.
+    }
+}
+
 void RenderManager::render_blocks() {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
