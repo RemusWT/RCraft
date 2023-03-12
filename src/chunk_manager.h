@@ -20,6 +20,8 @@ typedef struct Chunk {
     std::vector<Block> Blocks;
 
     Block* get_block_by_position();
+    void add_block(Block &block);
+    
 } Chunk;
 
 

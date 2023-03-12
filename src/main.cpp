@@ -8,6 +8,7 @@
 #include "font_rendering/font_rendering.h"
 #include "utils/debug.h"
 #include "render/render_manager.h"
+#incldue "chunk_manager.h"
 
 // @Bug There is a major problem between Release mode and Debug mode in VS.
 // It needs to be resolved at some point. Debug mode compiles and runs just fine.
@@ -49,6 +50,16 @@ int main() {
     // Manually set to experiment.
     GInfo.hide_cursor();
     GInfo.set_vsync(false);
+
+    Block Test_Block;
+    Test_Block.type = 1;
+    Test_Block.position = glm::vec3(0.0f, 1.0f, 0.0f);
+    
+    Chunk Test_Chunk;
+    Test_Chunk.add_block(Test_Block);
+    
+    ChunkManager CManager;
+    CManager.load_chunk(Test_Chunk);
 
 
     RenderManager RManager(GInfo);
